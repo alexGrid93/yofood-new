@@ -1,9 +1,9 @@
 import MainPage from '@/views/MainPage.vue'
 import NotFound from '@/views/NotFound.vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHashHistory('/yofood-new/'),
+  history: createWebHistory(),
   routes: [
     {
       path: '/:sheetId',
