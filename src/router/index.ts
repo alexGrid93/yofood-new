@@ -10,11 +10,6 @@ const router = createRouter({
       name: 'main',
       component: MainPage,
     },
-    {
-      path: '*',
-      name: 'notFound',
-      component: NotFound,
-    },
   ],
 })
 
