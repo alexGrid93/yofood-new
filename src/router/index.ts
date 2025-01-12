@@ -3,7 +3,7 @@ import NotFound from '@/views/NotFound.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/yofood-new/'"),
   routes: [
     {
       path: 'sheet/:sheetId',
