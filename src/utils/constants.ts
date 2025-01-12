@@ -18,7 +18,7 @@ export const arrayDays = ['пн', 'вт', 'ср', 'чт', 'пт']
 export const days = new Set(arrayDays)
 
 const getCurrentWeekDay = () => {
-  const currentDay = new Date().getDay()
+  const currentDay = new Date().getDay() + 1
 
   return arrayDays[currentDay] ?? arrayDays[0]
 }
