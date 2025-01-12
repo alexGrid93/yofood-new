@@ -10,11 +10,6 @@ const router = createRouter({
       name: 'main',
       component: MainPage,
     },
-    {
-      path: '/:pathMatch(.*)*', // Любой маршрут, который не совпадает с другими
-      name: 'not-found',
-      component: NotFound,
-    },
   ],
 })
 
