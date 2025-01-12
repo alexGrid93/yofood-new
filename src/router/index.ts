@@ -1,18 +1,19 @@
 import MainPage from '@/views/MainPage.vue'
+import NotFound from '@/views/NotFound.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/sheet/:sheetId',
-      name: 'home',
+      path: '/:sheetId',
+      name: 'main',
       component: MainPage,
     },
     {
       path: '/',
-      name: 'uu',
-      component: MainPage,
+      name: 'home',
+      component: NotFound,
     },
   ],
 })
