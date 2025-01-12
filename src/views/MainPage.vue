@@ -19,6 +19,9 @@ import SelectDay from '@/components/SelectDay.vue'
 import SelectDish from '@/components/SelectDish.vue'
 import SelectEmployee from '@/components/SelectEmployee.vue'
 
+const route = useRoute()
+const urlsheetId = route.query.sheetid as string
+
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
 const menuStartDayFromStorage = localStorage.getItem('menuStartDate')
@@ -35,11 +38,8 @@ const isEmployeeMode = ref(true)
 const isLoading = ref(false)
 
 onMounted(async () => {
-  const route = useRoute()
-  const urlSheetId = route.params.sheetId as string
-
   isLoading.value = true
-  await useMenuData(urlSheetId, menuData, menuStartDay)
+  await useMenuData(urlsheetId, menuData, menuStartDay)
   isLoading.value = false
 })
 
