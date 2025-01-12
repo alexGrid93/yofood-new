@@ -6,7 +6,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/:sheetId',
+      path: 'sheet/:sheetId',
       name: 'main',
       component: MainPage,
     },
