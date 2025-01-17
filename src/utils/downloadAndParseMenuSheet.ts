@@ -3,6 +3,7 @@ import { getJsDateFromExcel } from 'excel-date-to-js'
 import { getExportSpreadsheetLink } from './getExportSpreadsheetLink'
 import { days, maxEmployeesCount, startIndex } from './constants'
 import type { DayMenu, MenuData } from './types'
+import { addListItemEmojies } from './addListItemEmojies'
 
 export const downloadAndParseMenuSheet = async (sheetId: string) => {
   let menuStartDay: Date | undefined
@@ -33,7 +34,11 @@ export const downloadAndParseMenuSheet = async (sheetId: string) => {
     const sheetData = sheet.data.slice(startIndex, maxEmployeesCount)
 
     const dayMenu = sheetData.reduce((acc: DayMenu, current: string[]) => {
-      const filteredRow = current.filter((el) => typeof el === 'string')
+      const cleanedCurrent = current.slice(current.findIndex((item) => item !== undefined))
+
+      const itemsWithEmojies = addListItemEmojies(cleanedCurrent)
+
+      const filteredRow = itemsWithEmojies.filter((el) => typeof el === 'string')
 
       const employeeName = filteredRow.shift()?.trim()
 
