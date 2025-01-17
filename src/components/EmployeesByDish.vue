@@ -19,5 +19,6 @@ const props = defineProps(['modelValue'])
 .listItem {
   padding: 0px;
   margin-bottom: 10px;
+  font-size: 16px;
 }
 </style>
