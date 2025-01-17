@@ -13,7 +13,7 @@ const props = defineProps(['modelValue'])
 
 <style scoped>
 .list {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .listItem {
