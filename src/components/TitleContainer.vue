@@ -18,7 +18,7 @@
 
 h1 {
   font-family: 'Great Vibes', serif;
-  font-size: 40px;
+  font-size: 50px;
   color: #414042;
 }
 </style>
