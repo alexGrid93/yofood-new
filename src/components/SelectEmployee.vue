@@ -23,6 +23,7 @@ const updateSelectedEmployee = (value: SelectValue) => {
 
 <template>
   <Select
+    size="large"
     class="select"
     :value="modelValue"
     :options="formattedOptions"

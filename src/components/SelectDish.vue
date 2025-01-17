@@ -35,6 +35,7 @@ const updateSelectedDish = (value: SelectValue) => {
 
 <template>
   <Select
+    size="large"
     class="selectDish"
     :options="formattedOptions"
     :value="modelValue"

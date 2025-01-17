@@ -16,5 +16,5 @@ const options = computed(() => getOptionsForSelect(arrayDays))
 </script>
 
 <template>
-  <Select :options="options" :value="props.modelValue" @change="updateSelectedDay" />
+  <Select size="large" :options="options" :value="props.modelValue" @change="updateSelectedDay" />
 </template>
