@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CurrentDate from '@/components/CurrentDate.vue'
 import TitleContainer from '@/components/TitleContainer.vue'
-import { currentDayView, getCurrentDateView } from '@/utils/constants'
+import { currentDayView, getCurrentDateView, now } from '@/utils/constants'
 import { getDishesFromMenu } from '@/utils/getDishesFromMenu'
 import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
@@ -62,6 +62,10 @@ const employeesByDish = computed(() =>
   getEmployeesByDish(selectedDay.value, selectedDish.value, menuData.value),
 )
 
+const isActualMenu = computed(() => {
+  return now < menuStartDay.value!
+})
+
 const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
 
 watch(selectedDay, () => (selectedDish.value = undefined))
@@ -75,7 +79,11 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 
   <Spin class="spinner" size="large" v-if="isLoading" />
   <Flex vertical gap="25" v-else>
-    <div :style="{ marginTop: '20px' }" v-if="menuStartDay">
+    <div
+      :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
+      :style="{ marginTop: '20px' }"
+      v-if="menuStartDay"
+    >
       Меню от {{ getCurrentDateView(menuStartDay) }}
     </div>
     <div>
@@ -115,5 +123,13 @@ body {
 }
 .spinner > span > i {
   background-color: gray !important;
+}
+
+.actualMenuDate {
+  color: #41b619;
+}
+
+.expiredMenuDate {
+  color: #ce3d1d;
 }
 </style>
