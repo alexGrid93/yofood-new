@@ -63,9 +63,6 @@ const employeesByDish = computed(() =>
 )
 
 const isActualMenu = computed(() => {
-  console.log(now.getTime())
-  console.log(menuStartDay.value?.getTime())
-
   if (!menuStartDay.value) return false
 
   const timeDiff = now.getTime() - menuStartDay.value?.getTime()
