@@ -1,5 +1,7 @@
 export const now = new Date()
 
+export const millisecondsDay = 1000 * 60 * 60 * 24
+
 export const getCurrentDateView = (date: Date, config?: { withWeekday: boolean }) => {
   const options = {
     ...(config?.withWeekday ? { weekday: 'long' } : {}),

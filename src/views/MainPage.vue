@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CurrentDate from '@/components/CurrentDate.vue'
 import TitleContainer from '@/components/TitleContainer.vue'
-import { currentDayView, getCurrentDateView, now } from '@/utils/constants'
+import { currentDayView, getCurrentDateView, millisecondsDay, now } from '@/utils/constants'
 import { getDishesFromMenu } from '@/utils/getDishesFromMenu'
 import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
@@ -63,7 +63,14 @@ const employeesByDish = computed(() =>
 )
 
 const isActualMenu = computed(() => {
-  return now < menuStartDay.value!
+  console.log(now.getTime())
+  console.log(menuStartDay.value?.getTime())
+
+  if (!menuStartDay.value) return false
+
+  const timeDiff = now.getTime() - menuStartDay.value?.getTime()
+
+  return timeDiff < 7 * millisecondsDay
 })
 
 const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
