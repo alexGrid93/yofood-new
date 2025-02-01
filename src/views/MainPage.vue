@@ -11,7 +11,7 @@ import { Segmented, Spin, Button } from 'ant-design-vue'
 import { Flex } from 'ant-design-vue'
 
 import { useUpdateMenu } from '@/utils/useUpdateMenu'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import DishesByEmployee from '@/components/DishesByEmployee.vue'
 import EmployeesByDish from '@/components/EmployeesByDish.vue'
@@ -33,6 +33,7 @@ const menuStartDay = ref(
 )
 
 const errorState = ref(null)
+const currentDate = ref(new Date())
 const selectedEmployee = ref(selectedEmployeeFromStorage ?? undefined)
 const selectedDish = ref(undefined)
 const selectedDay = ref(currentDayView)
@@ -67,6 +68,28 @@ const isActualMenu = computed(() => {
   return timeDiff < 5 * millisecondsDay
 })
 
+const updateDate = () => {
+  currentDate.value = new Date()
+}
+
+onMounted(() => {
+  // Обновляем дату при загрузке
+  updateDate()
+
+  // Отслеживаем восстановление вкладки
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) updateDate()
+  })
+
+  // Отслеживаем фокус окна
+  window.addEventListener('focus', updateDate)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', updateDate)
+  window.removeEventListener('focus', updateDate)
+})
+
 const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
 
 const handleUpdateMenu = async () => {
@@ -80,6 +103,7 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
 <template>
+  {{ CurrentDate }}
   <Flex vertical gap="20">
     <CurrentDate />
     <TitleContainer />
