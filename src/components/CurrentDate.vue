@@ -1,12 +1,17 @@
 <script lang="ts" setup>
-import { getCurrentDateView, now } from '@/utils/constants'
+import { getCurrentDateView } from '@/utils/constants'
 import { TypographyText } from 'ant-design-vue'
+import { computed } from 'vue'
+
+const props = defineProps<{
+  date: Date
+}>()
+
+const formattedDate = computed(() => getCurrentDateView(props.date, { withWeekday: true }))
 </script>
 
 <template>
-  <TypographyText className="currentDate">{{
-    getCurrentDateView(now, { withWeekday: true })
-  }}</TypographyText>
+  <TypographyText className="currentDate">{{ formattedDate }}</TypographyText>
 </template>
 
 <style>
