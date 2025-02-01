@@ -9,9 +9,9 @@ export const downloadAndParseMenuSheet = async (adminSheetId: string) => {
   let menuStartDay: Date | undefined
   let error: string | undefined
 
-  const { menuTableUrl, adminError } = await getMenuUrl(adminSheetId)
+  const { menuTableUrl, adminError, menuSheetId } = await getMenuUrl(adminSheetId)
 
-  if (adminError || !menuTableUrl) {
+  if (adminError || !menuTableUrl || !menuSheetId) {
     error = adminError
     return { error }
   }
@@ -60,6 +60,8 @@ export const downloadAndParseMenuSheet = async (adminSheetId: string) => {
 
     return acc
   }, {})
+
+  localStorage.setItem('menuSheetId', menuSheetId)
 
   return { menuMap, menuStartDay }
 }

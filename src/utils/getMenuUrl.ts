@@ -27,8 +27,17 @@ export const getMenuUrl = async (adminSheetId: string) => {
   }
 
   try {
-    const menuTableUrl = getExportSpreadsheetLink(pageWithId.data[0][0].trim())
-    return { menuTableUrl }
+    const menuSheetId = pageWithId.data[0][0].trim()
+    const previosMenuSheetId = localStorage.getItem('menuSheetId')
+    console.log(menuSheetId, previosMenuSheetId)
+
+    if (previosMenuSheetId && menuSheetId == previosMenuSheetId) {
+      error = 'Попросите администратора приложения обновить id таблицы c меню'
+      return { adminError: error }
+    }
+
+    const menuTableUrl = getExportSpreadsheetLink(menuSheetId)
+    return { menuTableUrl, menuSheetId }
   } catch {
     error =
       'Возникла проблема с получением таблицы с меню. Скорее всего вы перешли по неправильной ссылке. Пожалуйста, перейдите по ссылке из чата'

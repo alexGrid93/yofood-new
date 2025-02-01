@@ -40,12 +40,6 @@ const isEmployeeMode = ref(true)
 
 const isLoading = ref(false)
 
-const handleUpdateMenu = async () => {
-  isLoading.value = true
-  await useUpdateMenu(adminSheetId, menuData, menuStartDay, errorState)
-  isLoading.value = false
-}
-
 const employeesToSelect = computed(() => {
   if (!menuData.value) return []
 
@@ -75,6 +69,13 @@ const isActualMenu = computed(() => {
 
 const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
 
+const handleUpdateMenu = async () => {
+  errorState.value = null
+  isLoading.value = true
+  await useUpdateMenu(adminSheetId, menuData, menuStartDay, errorState)
+  isLoading.value = false
+}
+
 watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
@@ -83,12 +84,16 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <CurrentDate />
     <TitleContainer />
   </Flex>
-  <Text type="danger" v-if="errorState">{{ errorState }}</Text>
-  <Text type="danger" v-else-if="!adminSheetId"
+  <Text type="danger" v-if="!adminSheetId"
     >Вы попали в корень сайта, так не работает. <br />
     <br />
     Пожалуйста, перейдите по ссылке из вашего чата.
   </Text>
+  <Flex gap="20" vertical v-else-if="errorState">
+    <Text type="danger">{{ errorState }}</Text>
+    <Button type="primary" @click="handleUpdateMenu">Обновить меню</Button>
+  </Flex>
+
   <Spin class="spinner" size="large" v-else-if="isLoading" />
   <Button type="primary" v-else-if="!menuStartDay" @click="handleUpdateMenu">Обновить меню</Button>
 
