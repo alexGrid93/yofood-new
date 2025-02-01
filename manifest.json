@@ -2,7 +2,7 @@
   "name": "YoFood",
   "short_name": "YoFood",
   "display": "standalone",
-  "theme_color": "#e0c796",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff",
   "icons": [
     {
