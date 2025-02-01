@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CurrentDate from '@/components/CurrentDate.vue'
 import TitleContainer from '@/components/TitleContainer.vue'
-import { currentDayView, getCurrentDateView, millisecondsDay, now } from '@/utils/constants'
+import { currentDayView, getCurrentDateView, millisecondsDay } from '@/utils/constants'
 import { getDishesFromMenu } from '@/utils/getDishesFromMenu'
 import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
@@ -63,7 +63,7 @@ const employeesByDish = computed(() =>
 const isActualMenu = computed(() => {
   if (!menuStartDay.value) return false
 
-  const timeDiff = now.getTime() - menuStartDay.value?.getTime()
+  const timeDiff = currentDate.value.getTime() - menuStartDay.value.getTime()
 
   return timeDiff < 5 * millisecondsDay
 })
@@ -73,15 +73,12 @@ const updateDate = () => {
 }
 
 onMounted(() => {
-  // Обновляем дату при загрузке
   updateDate()
 
-  // Отслеживаем восстановление вкладки
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) updateDate()
   })
 
-  // Отслеживаем фокус окна
   window.addEventListener('focus', updateDate)
 })
 
@@ -103,7 +100,6 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
 <template>
-  {{ currentDate }}
   <Flex vertical gap="20">
     <CurrentDate />
     <TitleContainer />
