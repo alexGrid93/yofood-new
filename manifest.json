@@ -1,6 +1,7 @@
 {
   "name": "YoFood",
   "short_name": "YoFood",
+  "display": "standalone",
   "icons": [
     {
       "src": "/public/favicon.png",
