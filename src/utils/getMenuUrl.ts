@@ -26,7 +26,13 @@ export const getMenuUrl = async (adminSheetId: string) => {
     return { adminError: error }
   }
 
-  const menuTableUrl = getExportSpreadsheetLink(pageWithId.data[0][0].trim())
+  try {
+    const menuTableUrl = getExportSpreadsheetLink(pageWithId.data[0][0].trim())
+    return { menuTableUrl }
+  } catch {
+    error =
+      'Возникла проблема с получением таблицы с меню. Скорее всего вы перешли по неправильной ссылке. Пожалуйста, перейдите по ссылке из чата'
 
-  return { menuTableUrl }
+    return { adminError: error }
+  }
 }
