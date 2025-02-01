@@ -103,7 +103,7 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
 <template>
-  {{ CurrentDate }}
+  {{ currentDate }}
   <Flex vertical gap="20">
     <CurrentDate />
     <TitleContainer />
