@@ -1,23 +1,30 @@
 import xlsx from 'node-xlsx'
 import { getJsDateFromExcel } from 'excel-date-to-js'
-import { getExportSpreadsheetLink } from './getExportSpreadsheetLink'
 import { days, maxEmployeesCount, startIndex } from './constants'
 import type { DayMenu, MenuData } from './types'
 import { addListItemEmojies } from './addListItemEmojies'
+import { getMenuUrl } from './getMenuUrl'
 
-export const downloadAndParseMenuSheet = async (sheetId: string) => {
+export const downloadAndParseMenuSheet = async (adminSheetId: string) => {
   let menuStartDay: Date | undefined
+  let error: string | undefined
 
-  const exportLink = getExportSpreadsheetLink(sheetId)
+  const { menuTableUrl, adminError } = await getMenuUrl(adminSheetId)
 
-  const response = await fetch(exportLink, {
+  if (adminError || !menuTableUrl) {
+    error = adminError
+    return { error }
+  }
+
+  const response = await fetch(menuTableUrl, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     },
   })
   if (!response.ok) {
-    throw new Error(`Ошибка загрузки таблицы: ${response.statusText}`)
+    error = `Ошибка загрузки таблицы c меню. Обратитесь к администратору приложения.`
+    return { error }
   }
   const arrayBuffer = await response.arrayBuffer()
   const workbook = xlsx.parse(arrayBuffer, { type: 'array' })
@@ -53,8 +60,6 @@ export const downloadAndParseMenuSheet = async (sheetId: string) => {
 
     return acc
   }, {})
-
-  localStorage.setItem('sheetId', sheetId)
 
   return { menuMap, menuStartDay }
 }

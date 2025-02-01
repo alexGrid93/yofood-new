@@ -7,20 +7,21 @@ import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
 import { getEmployeeMenuByDay } from '@/utils/getEmployeeMenuByDay'
 import type { MenuData } from '@/utils/types'
-import { Segmented, Spin } from 'ant-design-vue'
+import { Segmented, Spin, Button } from 'ant-design-vue'
 import { Flex } from 'ant-design-vue'
 
-import { useMenuData } from '@/utils/useMenuData'
-import { computed, onMounted, ref, watch } from 'vue'
+import { useUpdateMenu } from '@/utils/useUpdateMenu'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import DishesByEmployee from '@/components/DishesByEmployee.vue'
 import EmployeesByDish from '@/components/EmployeesByDish.vue'
 import SelectDay from '@/components/SelectDay.vue'
 import SelectDish from '@/components/SelectDish.vue'
 import SelectEmployee from '@/components/SelectEmployee.vue'
+import Text from 'ant-design-vue/es/typography/Text'
 
 const route = useRoute()
-const urlsheetId = route.query.sheetid as string
+const adminSheetId = route.query.sheetid as string
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -30,6 +31,8 @@ const menuData = ref(menuDataFromStorage ? (JSON.parse(menuDataFromStorage) as M
 const menuStartDay = ref(
   menuStartDayFromStorage ? new Date(JSON.parse(menuStartDayFromStorage)) : null,
 )
+
+const errorState = ref(null)
 const selectedEmployee = ref(selectedEmployeeFromStorage ?? undefined)
 const selectedDish = ref(undefined)
 const selectedDay = ref(currentDayView)
@@ -37,11 +40,11 @@ const isEmployeeMode = ref(true)
 
 const isLoading = ref(false)
 
-onMounted(async () => {
+const handleUpdateMenu = async () => {
   isLoading.value = true
-  await useMenuData(urlsheetId, menuData, menuStartDay)
+  await useUpdateMenu(adminSheetId, menuData, menuStartDay, errorState)
   isLoading.value = false
-})
+}
 
 const employeesToSelect = computed(() => {
   if (!menuData.value) return []
@@ -67,7 +70,7 @@ const isActualMenu = computed(() => {
 
   const timeDiff = now.getTime() - menuStartDay.value?.getTime()
 
-  return timeDiff < 7 * millisecondsDay
+  return timeDiff < 5 * millisecondsDay
 })
 
 const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
@@ -80,16 +83,24 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <CurrentDate />
     <TitleContainer />
   </Flex>
+  <Text type="danger" v-if="errorState">{{ errorState }}</Text>
+  <Text type="danger" v-else-if="!adminSheetId"
+    >Вы попали в корень сайта, так не работает. <br />
+    <br />
+    Пожалуйста, перейдите по ссылке из вашего чата.
+  </Text>
+  <Spin class="spinner" size="large" v-else-if="isLoading" />
+  <Button type="primary" v-else-if="!menuStartDay" @click="handleUpdateMenu">Обновить меню</Button>
 
-  <Spin class="spinner" size="large" v-if="isLoading" />
   <Flex vertical gap="25" v-else>
     <div
       :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
       :style="{ marginTop: '20px' }"
       v-if="menuStartDay"
     >
-      Меню от {{ getCurrentDateView(menuStartDay) }}
+      Меню от {{ getCurrentDateView(menuStartDay) }} {{ !isActualMenu ? '(не актуальное)' : '' }}
     </div>
+    <Button type="primary" v-if="!isActualMenu" @click="handleUpdateMenu">Обновить меню</Button>
     <div>
       <Segmented
         :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
