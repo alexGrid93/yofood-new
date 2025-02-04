@@ -27,6 +27,7 @@ const updateSelectedEmployee = (value: SelectValue) => {
     class="select"
     :value="modelValue"
     :options="formattedOptions"
+    show-search
     @change="updateSelectedEmployee"
   />
 </template>
