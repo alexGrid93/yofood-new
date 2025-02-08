@@ -34,8 +34,11 @@ export const downloadAndParseMenuSheet = async (adminSheetId: string) => {
       return acc
     }
 
-    if (!menuStartDay) {
-      menuStartDay = getJsDateFromExcel(sheet.data[0][0])
+    const maybeStartDate = sheet.data[0][0]
+    const isDate = maybeStartDate > 10000 && maybeStartDate < 73000
+
+    if (!menuStartDay && isDate) {
+      menuStartDay = getJsDateFromExcel(maybeStartDate)
     }
 
     const sheetData = sheet.data.slice(startIndex, maxEmployeesCount)
