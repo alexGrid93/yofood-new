@@ -1,3 +1,7 @@
 .ant-select-item-option-content {
-  font-size: 16px;
+  font-size: 18px;
+}
+
+.ant-select-selection-search * {
+  font-size: 18px;
 }
