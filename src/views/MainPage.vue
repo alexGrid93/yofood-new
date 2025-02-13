@@ -102,6 +102,7 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 <template>
   <Flex vertical gap="20">
     <CurrentDate :date="currentDate" />
+    <Text type="danger">Сегодня четверг. Не забудьте заполнить таблицу на следующую неделю) </Text>
     <TitleContainer />
   </Flex>
   <Text type="danger" v-if="!adminSheetId"
