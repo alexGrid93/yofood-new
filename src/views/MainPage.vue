@@ -65,7 +65,7 @@ const isActualMenu = computed(() => {
 
   const timeDiff = currentDate.value.getTime() - menuStartDay.value.getTime()
 
-  return timeDiff < 5 * millisecondsDay
+  return timeDiff < 3 * millisecondsDay
 })
 
 const updateDate = () => {
