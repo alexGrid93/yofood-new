@@ -125,7 +125,7 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     >
       Меню от {{ getCurrentDateView(menuStartDay) }} {{ !isActualMenu ? '(не актуальное)' : '' }}
     </div>
-    <Button type="primary" v-if="!isActualMenu" @click="handleUpdateMenu">Обновить меню</Button>
+    <Button type="primary" @click="handleUpdateMenu">Обновить меню</Button>
     <div>
       <Segmented
         :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
