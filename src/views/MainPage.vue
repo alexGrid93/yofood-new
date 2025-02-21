@@ -68,6 +68,10 @@ const isActualMenu = computed(() => {
   return timeDiff < 5 * millisecondsDay
 })
 
+const reloadButtonUrl = computed(() =>
+  isActualMenu.value ? '/src/assets/reload_disabled.svg' : '/src/assets/reload.svg',
+)
+
 const updateDate = () => {
   currentDate.value = new Date()
 }
@@ -100,6 +104,7 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
 <template>
+  <img @click="handleUpdateMenu" :src="reloadButtonUrl" class="reloadButton" />
   <Flex vertical gap="20">
     <CurrentDate :date="currentDate" />
     <TitleContainer />
@@ -125,7 +130,6 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     >
       Меню от {{ getCurrentDateView(menuStartDay) }} {{ !isActualMenu ? '(не актуальное)' : '' }}
     </div>
-    <Button v-if="!isActualMenu" type="primary" @click="handleUpdateMenu">Обновить меню</Button>
     <div>
       <Segmented
         :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
@@ -152,10 +156,26 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 
 <style>
 body {
+  position: relative;
   margin: 20px;
   padding: 10px;
   color: #231f20;
   max-width: 800px;
+}
+
+.reloadButton {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  width: 60px;
+  height: 60px;
 }
 
 .spinner {
