@@ -10,6 +10,9 @@ import type { MenuData } from '@/utils/types'
 import { Segmented, Spin, Button } from 'ant-design-vue'
 import { Flex } from 'ant-design-vue'
 
+import reloadSvg from '@/assets/reload.svg'
+import reloadDisabledSvg from '@/assets/reload_disabled.svg'
+
 import { useUpdateMenu } from '@/utils/useUpdateMenu'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -68,9 +71,7 @@ const isActualMenu = computed(() => {
   return timeDiff < 5 * millisecondsDay
 })
 
-const reloadButtonUrl = computed(() =>
-  isActualMenu.value ? 'src/assets/reload_disabled.svg' : 'src/assets/reload.svg',
-)
+const reloadButtonUrl = computed(() => (isActualMenu.value ? reloadSvg : reloadDisabledSvg))
 
 const updateDate = () => {
   currentDate.value = new Date()
