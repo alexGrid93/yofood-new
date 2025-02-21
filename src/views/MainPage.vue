@@ -187,6 +187,7 @@ body {
   outline: inherit;
   position: absolute;
   right: 20px;
+  top: 0;
   width: 60px;
   height: 60px;
   transition: transform 0.3s ease-in-out;
