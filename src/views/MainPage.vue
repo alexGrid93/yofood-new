@@ -71,7 +71,7 @@ const isActualMenu = computed(() => {
   return timeDiff < 5 * millisecondsDay
 })
 
-const reloadButtonUrl = computed(() => (isActualMenu.value ? reloadSvg : reloadDisabledSvg))
+const reloadButtonUrl = computed(() => (isActualMenu.value ? reloadDisabledSvg : reloadSvg))
 
 const updateDate = () => {
   currentDate.value = new Date()
