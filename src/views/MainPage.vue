@@ -69,7 +69,7 @@ const isActualMenu = computed(() => {
 })
 
 const reloadButtonUrl = computed(() =>
-  isActualMenu.value ? '/src/assets/reload_disabled.svg' : '/src/assets/reload.svg',
+  isActualMenu.value ? 'src/assets/reload_disabled.svg' : 'src/assets/reload.svg',
 )
 
 const updateDate = () => {
