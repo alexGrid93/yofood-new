@@ -102,7 +102,6 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 <template>
   <Flex vertical gap="20">
     <CurrentDate :date="currentDate" />
-    <Text type="danger">🦖 Сегодня четверг. Не забудьте заполнить таблицу на следующую неделю.</Text>
     <TitleContainer />
   </Flex>
   <Text type="danger" v-if="!adminSheetId"
@@ -126,7 +125,7 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     >
       Меню от {{ getCurrentDateView(menuStartDay) }} {{ !isActualMenu ? '(не актуальное)' : '' }}
     </div>
-    <Button type="primary" @click="handleUpdateMenu">Обновить меню</Button>
+    <Button v-if="!isActualMenu" type="primary" @click="handleUpdateMenu">Обновить меню</Button>
     <div>
       <Segmented
         :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
