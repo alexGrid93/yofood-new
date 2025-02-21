@@ -105,7 +105,11 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
 <template>
-  <img @click="handleUpdateMenu" :src="reloadButtonUrl" class="reloadButton" />
+  <img
+    @click="handleUpdateMenu"
+    :src="reloadButtonUrl"
+    :class="{ reloadButton: true, 'reloadButton--loading': isLoading }"
+  />
   <Flex vertical gap="20">
     <CurrentDate :date="currentDate" />
     <TitleContainer />
@@ -119,11 +123,9 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <Text type="danger">{{ errorState }}</Text>
     <Button type="primary" @click="handleUpdateMenu">Обновить меню</Button>
   </Flex>
-
-  <Spin class="spinner" size="large" v-else-if="isLoading" />
   <Button type="primary" v-else-if="!menuStartDay" @click="handleUpdateMenu">Обновить меню</Button>
 
-  <Flex vertical gap="25" v-else>
+  <Flex vertical gap="25" v-else-if="!isLoading">
     <div
       :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
       :style="{ marginTop: '20px' }"
@@ -164,6 +166,18 @@ body {
   max-width: 800px;
 }
 
+.spinning {
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .reloadButton {
   background: none;
   color: inherit;
@@ -174,16 +188,14 @@ body {
   outline: inherit;
   position: absolute;
   right: 20px;
-  top: 10px;
+  top: 0px;
   width: 60px;
   height: 60px;
+  transition: transform 0.3s ease-in-out;
 }
 
-.spinner {
-  margin-top: 20px;
-}
-.spinner > span > i {
-  background-color: gray !important;
+.reloadButton--loading {
+  animation: spin 1s linear infinite;
 }
 
 .actualMenuDate {
