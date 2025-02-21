@@ -7,7 +7,7 @@ import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
 import { getEmployeeMenuByDay } from '@/utils/getEmployeeMenuByDay'
 import type { MenuData } from '@/utils/types'
-import { Segmented, Spin, Button } from 'ant-design-vue'
+import { Segmented, Button } from 'ant-design-vue'
 import { Flex } from 'ant-design-vue'
 
 import reloadSvg from '@/assets/reload.svg'
@@ -123,9 +123,11 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <Text type="danger">{{ errorState }}</Text>
     <Button type="primary" @click="handleUpdateMenu">Обновить меню</Button>
   </Flex>
+
+  <Text class="spinner" v-else-if="isLoading">Меню обновляется...</Text>
   <Button type="primary" v-else-if="!menuStartDay" @click="handleUpdateMenu">Обновить меню</Button>
 
-  <Flex vertical gap="25" v-else-if="!isLoading">
+  <Flex vertical gap="25" v-else>
     <div
       :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
       :style="{ marginTop: '20px' }"
@@ -166,9 +168,6 @@ body {
   max-width: 800px;
 }
 
-.spinning {
-}
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -188,7 +187,7 @@ body {
   outline: inherit;
   position: absolute;
   right: 20px;
-  top: 0px;
+  top: 10px;
   width: 60px;
   height: 60px;
   transition: transform 0.3s ease-in-out;
@@ -196,6 +195,13 @@ body {
 
 .reloadButton--loading {
   animation: spin 1s linear infinite;
+}
+
+.spinner {
+  margin-top: 20px;
+}
+.spinner > span > i {
+  background-color: gray !important;
 }
 
 .actualMenuDate {
