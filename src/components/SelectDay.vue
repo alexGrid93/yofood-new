@@ -6,10 +6,11 @@ import type { SelectValue } from 'ant-design-vue/es/select'
 import { computed } from 'vue'
 
 const props = defineProps(['modelValue'])
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'update:day'])
 
 const updateSelectedDay = (value: SelectValue) => {
   emit('update:modelValue', value)
+  emit('update:day')
 }
 
 const options = computed(() => getOptionsForSelect(arrayDays))

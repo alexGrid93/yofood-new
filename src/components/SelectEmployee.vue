@@ -11,13 +11,14 @@ const props = defineProps({
     required: true,
   },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'update:employee'])
 
 const formattedOptions = computed(() => getOptionsForSelect(props.options))
 
 const updateSelectedEmployee = (value: SelectValue) => {
   localStorage.setItem('selectedEmployee', String(value))
   emit('update:modelValue', value)
+  emit('update:employee')
 }
 </script>
 
