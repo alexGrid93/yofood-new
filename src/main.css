@@ -5,3 +5,12 @@
 .ant-select-selection-search * {
   font-size: 16px;
 }
+
+@font-face {
+  font-family: "Samarkan";
+  src:
+    url("./assets/samarkan.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
