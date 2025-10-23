@@ -13,7 +13,7 @@
 }
 
 .maskotImg {
-  width: 100px;
+  width: 120px;
 }
 
 h1 {
