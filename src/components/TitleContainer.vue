@@ -17,7 +17,7 @@
 }
 
 h1 {
-  font-family: 'Great Vibes', serif;
+  font-family: 'Eater', serif;
   font-size: 50px;
   color: #414042;
 }
