@@ -167,6 +167,12 @@ watch(pastedUrl, (val) => {
   }
 })
 
+watch(isUpdateModalOpen, (isOpen) => {
+  if (!isOpen) {
+    pastedUrl.value = ''
+  }
+})
+
 watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
@@ -207,12 +213,6 @@ watch(selectedDay, () => (selectedDish.value = undefined))
       :ok-button-props="{
         disabled: !pastedSheetId,
         onClick: () => handleUpdateMenu(),
-      }"
-      :cancelButtonProps="{
-        onClick: () => {
-          pastedUrl = ''
-          isUpdateModalOpen = false
-        },
       }"
       :getContainer="false"
     >
