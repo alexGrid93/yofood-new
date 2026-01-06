@@ -3,12 +3,12 @@ import { downloadAndParseMenuSheet } from './downloadAndParseMenuSheet'
 import type { MenuData } from './types'
 
 export const useUpdateMenu = async (
-  adminSheetId: string,
+  currentSheetId: string | null,
   menuState: Ref<MenuData | null>,
   startDayState: Ref<Date | null>,
   errorState: Ref<string | null>,
 ) => {
-  const { menuMap, menuStartDay, error } = (await downloadAndParseMenuSheet(adminSheetId)) || {}
+  const { menuMap, menuStartDay, error } = (await downloadAndParseMenuSheet(currentSheetId)) || {}
 
   if (error || !menuMap || !menuStartDay) {
     errorState.value = error!

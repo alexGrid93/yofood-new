@@ -13,7 +13,7 @@ export const getCurrentDateView = (date: Date, config?: { withWeekday: boolean }
   return `${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}`
 }
 
-export const arrayDays = ['пн', 'вт', 'ср', 'чт', 'пт']
+export const arrayDays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб']
 
 export const days = new Set(arrayDays)
 

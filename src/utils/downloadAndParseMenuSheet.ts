@@ -3,20 +3,21 @@ import { getJsDateFromExcel } from 'excel-date-to-js'
 import { days, maxEmployeesCount, startIndex } from './constants'
 import type { DayMenu, MenuData } from './types'
 import { addListItemEmojies } from './addListItemEmojies'
-import { getMenuUrl } from './getMenuUrl'
+import { getExportSpreadsheetLink } from './getExportSpreadsheetLink'
 
-export const downloadAndParseMenuSheet = async (adminSheetId: string) => {
+export const downloadAndParseMenuSheet = async (currentSheetId: string | null) => {
   let menuStartDay: Date | undefined
   let error: string | undefined
 
-  const { menuTableUrl, adminError, menuSheetId } = await getMenuUrl(adminSheetId)
+  if (!currentSheetId) {
+    error = 'Не удалось получить ссылку на таблицу'
 
-  if (adminError || !menuTableUrl || !menuSheetId) {
-    error = adminError
     return { error }
   }
 
-  const response = await fetch(menuTableUrl, {
+  const exportAdminSheetLink = getExportSpreadsheetLink(currentSheetId)
+
+  const response = await fetch(exportAdminSheetLink, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -64,7 +65,7 @@ export const downloadAndParseMenuSheet = async (adminSheetId: string) => {
     return acc
   }, {})
 
-  localStorage.setItem('menuSheetId', menuSheetId)
+  localStorage.setItem('menuSheetId', currentSheetId)
 
   return { menuMap, menuStartDay }
 }

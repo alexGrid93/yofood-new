@@ -7,15 +7,26 @@ import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
 import { getEmployeeMenuByDay } from '@/utils/getEmployeeMenuByDay'
 import type { MenuData } from '@/utils/types'
-import { Segmented, Button, Image, Flex, Modal, Typography, Spin, TypographyTitle } from 'ant-design-vue'
-import {ShareAltOutlined} from '@ant-design/icons-vue';
+import {
+  Segmented,
+  Button,
+  Image,
+  Flex,
+  Modal,
+  Typography,
+  Spin,
+  TypographyTitle,
+  Input,
+  Divider,
+  Alert,
+} from 'ant-design-vue'
+import { ShareAltOutlined } from '@ant-design/icons-vue'
 
 import reloadSvg from '@/assets/reload.svg'
 import reloadDisabledSvg from '@/assets/reload_disabled.svg'
 
 import { useUpdateMenu } from '@/utils/useUpdateMenu'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
 import DishesByEmployee from '@/components/DishesByEmployee.vue'
 import EmployeesByDish from '@/components/EmployeesByDish.vue'
 import SelectDay from '@/components/SelectDay.vue'
@@ -23,9 +34,6 @@ import SelectDish from '@/components/SelectDish.vue'
 import SelectEmployee from '@/components/SelectEmployee.vue'
 import Text from 'ant-design-vue/es/typography/Text'
 import { useShareImage } from '@/features/useShareImage.ts'
-
-const route = useRoute()
-const adminSheetId = route.query.sheetid as string
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -42,6 +50,10 @@ const selectedEmployee = ref(selectedEmployeeFromStorage ?? undefined)
 const selectedDish = ref(undefined)
 const selectedDay = ref(currentDayView)
 const isEmployeeMode = ref(true)
+const isUpdateModalOpen = ref(false)
+const pastedUrl = ref('')
+const inputStatus = ref<'warning' | 'error' | ''>('')
+const pastedSheetId = ref<string | null>(null)
 
 const isLoading = ref(false)
 
@@ -78,6 +90,15 @@ const updateDate = () => {
   currentDate.value = new Date()
 }
 
+const pasteFromClipboard = async () => {
+  const text = await navigator.clipboard.readText()
+  pastedUrl.value = text
+}
+
+const reloadPage = () => {
+  window.location.reload()
+}
+
 onMounted(() => {
   updateDate()
 
@@ -98,23 +119,53 @@ const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
 const handleUpdateMenu = async () => {
   errorState.value = null
   isLoading.value = true
-  await useUpdateMenu(adminSheetId, menuData, menuStartDay, errorState)
+  isUpdateModalOpen.value = false
+  pastedUrl.value = ''
+  await useUpdateMenu(pastedSheetId.value, menuData, menuStartDay, errorState)
   isLoading.value = false
 }
 
-const {
-  onClick,
-  isOpenShareModal,
-  imageResponse,
-  resetImageResponse
-} = useShareImage()
+const SHEETS_URL_REGEX = /^https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA-Z0-9_-]+/
+
+const isValidGoogleSheetUrl = (value: string): boolean => {
+  return SHEETS_URL_REGEX.test(value.trim())
+}
+
+const extractGoogleSheetId = (url: string): string | null => {
+  if (!url) return null
+
+  const match = url.match(/^https:\/\/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/)
+
+  return match ? match[1] : null
+}
+
+const { onClick, isOpenShareModal, imageResponse, resetImageResponse } = useShareImage()
 
 const onUpdateDay = () => {
-  resetImageResponse();
-};
+  resetImageResponse()
+}
 const onUpdateEmployee = () => {
-  resetImageResponse();
-};
+  resetImageResponse()
+}
+
+watch(pastedUrl, (val) => {
+  if (!val) {
+    inputStatus.value = ''
+    pastedSheetId.value = null
+
+    return
+  }
+
+  const isValid = isValidGoogleSheetUrl(val)
+
+  if (isValid) {
+    inputStatus.value = ''
+    pastedSheetId.value = extractGoogleSheetId(val)
+  } else {
+    inputStatus.value = 'error'
+    pastedSheetId.value = ''
+  }
+})
 
 watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
@@ -122,7 +173,13 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 <template>
   <Flex class="menu" align="center" gap="small">
     <img
-      @click="handleUpdateMenu"
+      @click="
+        () => {
+          if (!isLoading) {
+            isUpdateModalOpen = true
+          }
+        }
+      "
       :src="reloadButtonUrl"
       :class="{ reloadButton: true, 'reloadButton--loading': isLoading }"
     />
@@ -130,19 +187,48 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <Button
       v-if="isEmployeeMode && selectedEmployee"
       @click="
-          () =>
-            onClick({
-              dateInfo: selectedDay,
-              menu: employeeMenuByDay || [''],
-              userName: selectedEmployee || '',
-            })
-        "
+        () =>
+          onClick({
+            dateInfo: selectedDay,
+            menu: employeeMenuByDay || [''],
+            userName: selectedEmployee || '',
+          })
+      "
       size="large"
     >
       <template #icon>
         <ShareAltOutlined />
       </template>
     </Button>
+
+    <Modal
+      v-model:open="isUpdateModalOpen"
+      cancelText="Отменить"
+      :ok-button-props="{
+        disabled: !pastedSheetId,
+        onClick: () => handleUpdateMenu(),
+      }"
+      :cancelButtonProps="{
+        onClick: () => {
+          pastedUrl = ''
+          isUpdateModalOpen = false
+        },
+      }"
+      :getContainer="false"
+    >
+      <template #title> Обновить меню </template>
+      <Flex :gap="10" vertical>
+        <Text>Вставьте ссылку на актуальную таблицу</Text>
+        <Input v-model:value="pastedUrl" :status="inputStatus" placeholder="Ссылка" allow-clear />
+        <Button @click="pasteFromClipboard">Вставить</Button>
+      </Flex>
+      <Divider />
+      <Alert
+        message="Автоподгрузка актуальной таблицы отключена.
+Админские таблицы больше не используются. Их можно удалить."
+      />
+      <Divider />
+    </Modal>
 
     <Modal
       v-model:open="isOpenShareModal"
@@ -153,15 +239,8 @@ watch(selectedDay, () => (selectedDish.value = undefined))
       centered
     >
       <template #title>Поделиться едой</template>
-      <Flex
-        align="center"
-        justify="center"
-        class="imageContainer"
-      >
-        <Spin
-          v-if="!imageResponse"
-          size="large"
-        />
+      <Flex align="center" justify="center" class="imageContainer">
+        <Spin v-if="!imageResponse" size="large" />
         <Image
           v-else
           :src="imageResponse"
@@ -174,7 +253,10 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 
       <TypographyTitle :level="5">Как сохранить?</TypographyTitle>
       <Typography>1. Нажмите и удерживайте это изображение.</Typography>
-      <Typography>2. В открывшемся меню выберите действие: сохранить изображение; копировать изображение.</Typography>
+      <Typography
+        >2. В открывшемся меню выберите действие: сохранить изображение; копировать
+        изображение.</Typography
+      >
     </Modal>
   </Flex>
 
@@ -182,20 +264,14 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <CurrentDate :date="currentDate" />
     <TitleContainer />
   </Flex>
-  <Text type="danger" v-if="!adminSheetId"
-    >Вы попали в корень сайта, так не работает. <br />
-    <br />
-    Пожалуйста, перейдите по ссылке из вашего чата.
-  </Text>
-  <Flex gap="20" vertical v-else-if="errorState">
+  <Flex gap="20" vertical v-if="errorState">
     <Text type="danger">{{ errorState }}</Text>
-    <Button type="primary" @click="handleUpdateMenu">Обновить меню</Button>
+    <Button @click="reloadPage">Перезагрузить</Button>
   </Flex>
 
   <Text class="spinner" v-else-if="isLoading">Меню обновляется...</Text>
-  <Button type="primary" v-else-if="!menuStartDay" @click="handleUpdateMenu">Обновить меню</Button>
 
-  <Flex vertical gap="25" v-else>
+  <Flex vertical gap="25" v-else-if="menuStartDay">
     <div
       :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
       :style="{ marginTop: '20px' }"
@@ -213,7 +289,11 @@ watch(selectedDay, () => (selectedDish.value = undefined))
     <div v-if="isEmployeeMode">
       <Flex gap="10">
         <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
-        <SelectEmployee @update:employee="onUpdateEmployee" v-model="selectedEmployee" :options="employeesToSelect" />
+        <SelectEmployee
+          @update:employee="onUpdateEmployee"
+          v-model="selectedEmployee"
+          :options="employeesToSelect"
+        />
       </Flex>
       <DishesByEmployee v-model="employeeMenuByDay" />
     </div>
@@ -286,6 +366,6 @@ body {
 .imageContainer {
   width: 100%;
   height: 100%;
-  aspect-ratio: 1/1
+  aspect-ratio: 1/1;
 }
 </style>
