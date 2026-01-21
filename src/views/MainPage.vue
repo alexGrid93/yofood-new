@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import CurrentDate from '@/components/CurrentDate.vue'
 import TitleContainer from '@/components/TitleContainer.vue'
-import { currentDayView, getCurrentDateView, millisecondsDay } from '@/utils/constants'
+import ActualMenu from '@/components/ActualMenu.vue'
+import { currentDayView, millisecondsDay } from '@/utils/constants'
 import { getDishesFromMenu } from '@/utils/getDishesFromMenu'
 import { getEmployeesByDish } from '@/utils/getEmployeesByDish'
 import { getEmployeesFromMenu } from '@/utils/getEmployeesFromMenu'
@@ -272,13 +273,8 @@ watch(selectedDay, () => (selectedDish.value = undefined))
   <Text class="spinner" v-else-if="isLoading">Меню обновляется...</Text>
 
   <Flex vertical gap="25" v-else-if="menuStartDay">
-    <div
-      :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
-      :style="{ marginTop: '20px' }"
-      v-if="menuStartDay"
-    >
-      Меню от {{ getCurrentDateView(menuStartDay) }} {{ !isActualMenu ? '(не актуальное)' : '' }}
-    </div>
+    <ActualMenu :style="{ marginTop: '20px' }" />
+
     <div>
       <Segmented
         :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
@@ -353,14 +349,6 @@ body {
 }
 .spinner > span > i {
   background-color: gray !important;
-}
-
-.actualMenuDate {
-  color: #41b619;
-}
-
-.expiredMenuDate {
-  color: #ce3d1d;
 }
 
 .imageContainer {

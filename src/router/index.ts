@@ -1,4 +1,5 @@
 import MainPage from '@/views/MainPage.vue'
+import DeliveryCheckPage from '@/views/DeliveryCheckPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -8,6 +9,11 @@ const router = createRouter({
       path: '/',
       name: 'main',
       component: MainPage,
+    },
+    {
+      path: '/delivery-check',
+      name: 'delivery-check',
+      component: DeliveryCheckPage,
     },
   ],
 })
