@@ -1,19 +1,20 @@
 import type { DayMenu, FoodItem } from '@/utils/types.ts'
 import { EmojiMap } from '@/constants/emojiMap.ts'
+import type { DishType } from '@/enums/DishType.ts'
 
 export const useDeliveryCheck = () => {
   const menuDataFromStorage = localStorage.getItem('menuData')
 
-  const getTotalDishes = (day: string): Record<string, FoodItem[]> | null => {
+  const getTotalDishes = (day: string): Record<DishType, FoodItem[]> | null => {
     if (!menuDataFromStorage) return null
 
     const menuDataByDay: DayMenu = JSON.parse(menuDataFromStorage)[day]
 
-    return Object.values(menuDataByDay).reduce<Record<string, FoodItem[]>>((acc, dayFoods) => {
+    return Object.values(menuDataByDay).reduce<Record<DishType, FoodItem[]>>((acc, dayFoods) => {
       dayFoods.forEach((food) => {
         const key = Object.values(EmojiMap).find(
           (item) => item.emoji === food.substring(0, 2).trim(),
-        )?.key || 'other' // эмодзи
+        )?.key || 'other' as DishType
 
         const rest = food.slice(2).trim()
         const [ruName, rsName] = rest.split('/').map((s) => s.trim())
@@ -30,13 +31,14 @@ export const useDeliveryCheck = () => {
       })
 
       return acc
-    }, {})
+    }, {} as Record<DishType, FoodItem[]>)
   }
 
-  const setTotalToStore = (total: Record<string, FoodItem[]>) => {
+  const setTotalToStore = (total: Record<DishType, FoodItem[]> | null) => {
+    if (!total) return
     localStorage.setItem('totalDishes', JSON.stringify(total))
   };
-  const getTotalFromStore = (): Record<string, FoodItem[]> | null => {
+  const getTotalFromStore = (): Record<DishType, FoodItem[]> | null => {
     const total = localStorage.getItem('totalDishes')
 
     if (!total || total === 'undefined') return null
@@ -44,7 +46,7 @@ export const useDeliveryCheck = () => {
     return JSON.parse(total)
   }
 
-  const updateDishStatus = (type: string, name: string, status: string) => {
+  const updateDishStatus = (type: DishType, name: string, status: string) => {
     const fromStore = getTotalFromStore();
 
     if (!fromStore) return

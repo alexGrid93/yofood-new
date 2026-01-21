@@ -1,37 +1,40 @@
-export const EmojiMap = {
-  breakfast: {
+import {DishType} from '@/enums/DishType.ts'
+import type { EmojiMapItem } from '@/utils/types.ts'
+
+export const EmojiMap: Record<DishType, EmojiMapItem> = {
+  [DishType.BREAKFAST]: {
     emoji: '🍳',
     name: 'Завтрак',
-    key: 'breakfast',
+    key: DishType.BREAKFAST,
   },
-  juice: {
+  [DishType.JUICE]: {
     emoji: '🥤',
     name: 'Сок',
-    key: 'juice',
+    key: DishType.JUICE,
   },
-  soup: {
+  [DishType.SOUP]: {
     emoji: '🍲',
     name: 'Суп',
-    key: 'soup',
+    key: DishType.SOUP,
   },
-  salad: {
+  [DishType.SALAD]: {
     emoji: '🥗',
     name: 'Салат',
-    key: 'salad',
+    key: DishType.SALAD,
   },
-  mainDish: {
+  [DishType.MAIN_DISH]: {
     emoji: '🥘',
     name: 'Горячее',
-    key: 'mainDish',
+    key: DishType.MAIN_DISH,
   },
-  sideDish: {
+  [DishType.SIDE_DISH]: {
     emoji: '🍚',
     name: 'Гарниры',
-    key: 'sideDish',
+    key: DishType.SIDE_DISH,
   },
-  dessert: {
+  [DishType.DESSERT]: {
     emoji: '🧁',
     name: 'Десерты',
-    key: 'dessert',
+    key: DishType.DESSERT,
   },
 }

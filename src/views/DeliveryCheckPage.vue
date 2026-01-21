@@ -9,13 +9,14 @@ import { useDeliveryCheck } from '@/features/useDeliveryCheck.ts'
 import { EmojiMap } from '@/constants/emojiMap.ts'
 import type { FoodItem } from '@/utils/types.ts'
 import { sortByPriority } from '@/utils/sortByPriority.ts'
+import type { DishType } from '@/enums/DishType.ts'
 
 const currentDate = ref(new Date())
 const { getTotalDishes, setTotalToStore, getTotalFromStore, updateDishStatus } = useDeliveryCheck()
 
 const totalDishes = ref<Record<string, FoodItem[]>>({})
 
-const updateStatus = (type: string, name: string) => {
+const updateStatus = (type: DishType, name: string) => {
   const getStatus = () => {
     const currentItem = totalDishes.value[type].find((item) => item.rsName === name)
 
@@ -33,7 +34,7 @@ const updateStatus = (type: string, name: string) => {
 
   const newTotal = updateDishStatus(type, name, getStatus())
 
-  totalDishes.value = newTotal
+  totalDishes.value = newTotal || {}
 }
 
 onMounted(() => {
@@ -56,7 +57,7 @@ onMounted(() => {
 
   setTotalToStore(total)
 
-  totalDishes.value = total
+  totalDishes.value = total || {}
 
   localStorage.setItem('currentTotalDay', currentDayView)
 
@@ -79,11 +80,11 @@ const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
         )"
         :key="`type-${type}`"
       >
-        <h3>{{ EmojiMap[type[0]].name }}&nbsp;{{ EmojiMap[type[0]].emoji }}</h3>
+        <h3>{{ EmojiMap[type[0] as DishType].name }}&nbsp;{{ EmojiMap[type[0] as DishType].emoji }}</h3>
 
         <List :locale="{ emptyText: '🗿 Нет данных' }" class="list">
           <ListItem
-            @click="updateStatus(type[0], dish.rsName)"
+            @click="updateStatus(type[0] as DishType, dish.rsName)"
             class="listItem dish"
             v-for="(dish, index) in totalDishes[type[0]].sort((a, b) => b.count - a.count)"
             :key="index"
@@ -122,7 +123,7 @@ const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
 }
 
 .listItem {
-  padding: 0px;
+  padding: 0;
   margin-bottom: 15px;
   font-size: 16px;
 }
