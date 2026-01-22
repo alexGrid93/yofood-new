@@ -1,4 +1,4 @@
-import MainPage from '@/views/MainPage.vue'
+import RouteView from '@/views/RouteView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      component: MainPage,
+      component: RouteView,
     },
   ],
 })
