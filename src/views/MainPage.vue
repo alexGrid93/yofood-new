@@ -35,6 +35,7 @@ import SelectDish from '@/components/SelectDish.vue'
 import SelectEmployee from '@/components/SelectEmployee.vue'
 import Text from 'ant-design-vue/es/typography/Text'
 import { useShareImage } from '@/features/useShareImage.ts'
+import DeliveryCheckPage from '@/views/DeliveryCheckPage.vue'
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -178,129 +179,135 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 </script>
 
 <template>
-  <Flex class="menu" align="center" gap="small">
-    <img
-      @click="
-        () => {
-          if (!isLoading) {
-            isUpdateModalOpen = true
+  <template v-if="$route.query.mode === 'delivery'">
+    <DeliveryCheckPage />
+  </template>
+
+  <template v-else>
+    <Flex class="menu" align="center" gap="small">
+      <img
+        @click="
+          () => {
+            if (!isLoading) {
+              isUpdateModalOpen = true
+            }
           }
-        }
-      "
-      :src="reloadButtonUrl"
-      :class="{ reloadButton: true, 'reloadButton--loading': isLoading }"
-    />
-
-    <Button
-      v-if="isEmployeeMode && selectedEmployee"
-      @click="
-        () =>
-          onClick({
-            dateInfo: selectedDay,
-            menu: employeeMenuByDay || [''],
-            userName: selectedEmployee || '',
-          })
-      "
-      size="large"
-    >
-      <template #icon>
-        <ShareAltOutlined />
-      </template>
-    </Button>
-
-    <Modal
-      v-model:open="isUpdateModalOpen"
-      cancelText="Отменить"
-      :ok-button-props="{
-        disabled: !pastedSheetId,
-        onClick: () => handleUpdateMenu(),
-      }"
-      :getContainer="false"
-    >
-      <template #title> Обновить меню </template>
-      <Flex :gap="10" vertical>
-        <Text>Вставьте ссылку на актуальную таблицу</Text>
-        <Input v-model:value="pastedUrl" :status="inputStatus" placeholder="Ссылка" allow-clear />
-        <Button @click="pasteFromClipboard">Вставить</Button>
-      </Flex>
-      <Divider />
-      <Alert
-        message="Автоподгрузка актуальной таблицы отключена.
-Админские таблицы больше не используются. Их можно удалить."
+        "
+        :src="reloadButtonUrl"
+        :class="{ reloadButton: true, 'reloadButton--loading': isLoading }"
       />
-      <Divider />
-    </Modal>
 
-    <Modal
-      v-model:open="isOpenShareModal"
-      :getContainer="false"
-      :footer="false"
-      okText="Сохранить"
-      destroyOnClose
-      centered
-    >
-      <template #title>Поделиться едой</template>
-      <Flex align="center" justify="center" class="imageContainer">
-        <Spin v-if="!imageResponse" size="large" />
-        <Image
-          v-else
-          :src="imageResponse"
-          :preview="false"
-          :placeholder="true"
-          width="600"
-          height="600"
-        />
-      </Flex>
-
-      <TypographyTitle :level="5">Как сохранить?</TypographyTitle>
-      <Typography>1. Нажмите и удерживайте это изображение.</Typography>
-      <Typography
-        >2. В открывшемся меню выберите действие: сохранить изображение; копировать
-        изображение.</Typography
+      <Button
+        v-if="isEmployeeMode && selectedEmployee"
+        @click="
+          () =>
+            onClick({
+              dateInfo: selectedDay,
+              menu: employeeMenuByDay || [''],
+              userName: selectedEmployee || '',
+            })
+        "
+        size="large"
       >
-    </Modal>
-  </Flex>
+        <template #icon>
+          <ShareAltOutlined />
+        </template>
+      </Button>
 
-  <Flex vertical gap="20">
-    <CurrentDate :date="currentDate" />
-    <TitleContainer />
-  </Flex>
-  <Flex gap="20" vertical v-if="errorState">
-    <Text type="danger">{{ errorState }}</Text>
-    <Button @click="reloadPage">Перезагрузить</Button>
-  </Flex>
-
-  <Text class="spinner" v-else-if="isLoading">Меню обновляется...</Text>
-
-  <Flex vertical gap="25" v-else-if="menuStartDay">
-    <ActualMenu :style="{ marginTop: '20px' }" />
-
-    <div>
-      <Segmented
-        :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
-        :options="['Искать по имени', 'Искать по блюду']"
-        @change="handleTogglehMode"
-      />
-    </div>
-    <div v-if="isEmployeeMode">
-      <Flex gap="10">
-        <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
-        <SelectEmployee
-          @update:employee="onUpdateEmployee"
-          v-model="selectedEmployee"
-          :options="employeesToSelect"
+      <Modal
+        v-model:open="isUpdateModalOpen"
+        cancelText="Отменить"
+        :ok-button-props="{
+          disabled: !pastedSheetId,
+          onClick: () => handleUpdateMenu(),
+        }"
+        :getContainer="false"
+      >
+        <template #title> Обновить меню </template>
+        <Flex :gap="10" vertical>
+          <Text>Вставьте ссылку на актуальную таблицу</Text>
+          <Input v-model:value="pastedUrl" :status="inputStatus" placeholder="Ссылка" allow-clear />
+          <Button @click="pasteFromClipboard">Вставить</Button>
+        </Flex>
+        <Divider />
+        <Alert
+          message="Автоподгрузка актуальной таблицы отключена.
+Админские таблицы больше не используются. Их можно удалить."
         />
-      </Flex>
-      <DishesByEmployee v-model="employeeMenuByDay" />
-    </div>
-    <div v-else>
-      <Flex vertical gap="10">
-        <SelectDay v-model="selectedDay" />
-        <SelectDish v-model="selectedDish" :options="dishesToSelect[selectedDay]" />
-      </Flex>
-      <EmployeesByDish v-model="employeesByDish" />
-    </div>
-  </Flex>
+        <Divider />
+      </Modal>
+
+      <Modal
+        v-model:open="isOpenShareModal"
+        :getContainer="false"
+        :footer="false"
+        okText="Сохранить"
+        destroyOnClose
+        centered
+      >
+        <template #title>Поделиться едой</template>
+        <Flex align="center" justify="center" class="imageContainer">
+          <Spin v-if="!imageResponse" size="large" />
+          <Image
+            v-else
+            :src="imageResponse"
+            :preview="false"
+            :placeholder="true"
+            width="600"
+            height="600"
+          />
+        </Flex>
+
+        <TypographyTitle :level="5">Как сохранить?</TypographyTitle>
+        <Typography>1. Нажмите и удерживайте это изображение.</Typography>
+        <Typography
+          >2. В открывшемся меню выберите действие: сохранить изображение; копировать
+          изображение.</Typography
+        >
+      </Modal>
+    </Flex>
+
+    <Flex vertical gap="20">
+      <CurrentDate :date="currentDate" />
+      <TitleContainer />
+    </Flex>
+    <Flex gap="20" vertical v-if="errorState">
+      <Text type="danger">{{ errorState }}</Text>
+      <Button @click="reloadPage">Перезагрузить</Button>
+    </Flex>
+
+    <Text class="spinner" v-else-if="isLoading">Меню обновляется...</Text>
+
+    <Flex vertical gap="25" v-else-if="menuStartDay">
+      <ActualMenu :style="{ marginTop: '20px' }" />
+
+      <div>
+        <Segmented
+          :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
+          :options="['Искать по имени', 'Искать по блюду']"
+          @change="handleTogglehMode"
+        />
+      </div>
+      <div v-if="isEmployeeMode">
+        <Flex gap="10">
+          <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
+          <SelectEmployee
+            @update:employee="onUpdateEmployee"
+            v-model="selectedEmployee"
+            :options="employeesToSelect"
+          />
+        </Flex>
+        <DishesByEmployee v-model="employeeMenuByDay" />
+      </div>
+      <div v-else>
+        <Flex vertical gap="10">
+          <SelectDay v-model="selectedDay" />
+          <SelectDish v-model="selectedDish" :options="dishesToSelect[selectedDay]" />
+        </Flex>
+        <EmployeesByDish v-model="employeesByDish" />
+      </div>
+    </Flex>
+  </template>
 </template>
 
 <style>
