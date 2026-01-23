@@ -70,7 +70,7 @@ const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
 <template>
   <Flex vertical gap="20">
     <CurrentDate :date="currentDate" />
-    <TitleContainer />
+    <TitleContainer @click-logo="$router.push('')" />
     <ActualMenu />
 
     <Flex vertical gap="10">
@@ -80,7 +80,9 @@ const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
         )"
         :key="`type-${type}`"
       >
-        <h3>{{ EmojiMap[type[0] as DishType].name }}&nbsp;{{ EmojiMap[type[0] as DishType].emoji }}</h3>
+        <h3>
+          {{ EmojiMap[type[0] as DishType].name }}&nbsp;{{ EmojiMap[type[0] as DishType].emoji }}
+        </h3>
 
         <List :locale="{ emptyText: '🗿 Нет данных' }" class="list">
           <ListItem

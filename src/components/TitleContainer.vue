@@ -1,7 +1,11 @@
+<script setup lang="ts">
+defineEmits(['clickLogo', 'clickTitle'])
+</script>
+
 <template>
   <div className="titleContainer">
-    <img className="maskotImg" src="../assets/mascot_1.png" />
-    <h1>YoFood</h1>
+    <img @click="$emit('clickLogo')" className="maskotImg" src="../assets/mascot_1.png" />
+    <h1 @click="$emit('clickTitle')">YoFood</h1>
   </div>
 </template>
 
