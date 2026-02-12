@@ -5,6 +5,9 @@ import heartB from '../../assets/heart_b.svg'
 import { useStorage } from '@vueuse/core'
 import { valentines } from '@/constants/valentines.ts'
 
+const isActivateValentineScreen = useStorage('valentineActivateScreen', false)
+const isValentineWasUsed = useStorage('valentineWasUsed', false)
+
 type Particle = {
   id: number
   src: string
@@ -220,8 +223,6 @@ onBeforeUnmount(() => {
   stop()
 })
 
-const isActivateValentineScreen = useStorage('valentineActivateScreen', false)
-
 const onClose = () => {
   isActivateValentineScreen.value = false
 }
@@ -294,6 +295,8 @@ const isShowOpenButton = ref(false)
 
 function onOpenClick() {
   isShowOpenButton.value = false
+
+  isValentineWasUsed.value = true
 }
 
 function onChooseAgain() {
