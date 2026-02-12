@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@vueuse/core": "^14.2.1",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.8.4",
     "excel-date-to-js": "^1.1.5",
