@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, markRaw, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import heartA from '../../assets/heart_a.svg'
 import heartB from '../../assets/heart_b.svg'
+import HeartIcoA from './HeartIcoA.vue'
+import HeartIcoB from './HeartIcoB.vue'
 import { useStorage } from '@vueuse/core'
 import { valentines } from '@/constants/valentines.ts'
 
@@ -11,6 +13,7 @@ const isValentineWasUsed = useStorage('valentineWasUsed', false)
 type Particle = {
   id: number
   src: string
+  variant: keyof typeof SETTINGS.componentVariants
   x: number
   y: number // расстояние от низа, растёт вверх
   size: number
@@ -30,6 +33,10 @@ type Particle = {
 const SETTINGS = {
   // твои 2 картинки
   images: [heartA, heartB],
+  componentVariants: {
+    A: markRaw(HeartIcoA),
+    B: markRaw(HeartIcoB),
+  },
 
   // как часто появляются (мс)
   spawnEveryMs: 400,
@@ -69,11 +76,12 @@ const SETTINGS = {
 const isSpawningEnabled = ref(true)
 
 const rootEl = ref<HTMLElement | null>(null)
-const particles = ref<Particle[]>([])
+const particles = shallowRef<Particle[]>([])
 
 type Focused = {
   id: number
   src: string
+  variant: keyof typeof SETTINGS.componentVariants
   startLeft: number
   startTop: number
   startW: number
@@ -97,6 +105,11 @@ function rand(min: number, max: number) {
 function pickImage() {
   const arr = SETTINGS.images
   return arr[Math.floor(Math.random() * arr.length)] || ''
+}
+
+function pickVariant(): keyof typeof SETTINGS.componentVariants {
+  const keys = Object.keys(SETTINGS.componentVariants) as Array<keyof typeof SETTINGS.componentVariants>
+  return keys[Math.floor(Math.random() * keys.length)] ?? 'A'
 }
 
 const canRun = computed(() => {
@@ -124,6 +137,7 @@ function spawn() {
   const p: Particle = {
     id: idSeq++,
     src: pickImage(),
+    variant: pickVariant(),
     x,
     y: -size - rand(0, 40), // старт чуть ниже низа
     size,
@@ -193,7 +207,7 @@ function particleStyle(p: Particle) {
   const translateY = -p.y // вверх = отрицательное смещение
 
   return {
-    width: `${p.size}px`,
+    fontSize: `${p.size}px`,
     left: `${p.x}px`,
     opacity: String(p.opacity),
     transform: `translate(${sway}px, ${translateY}px) rotate(${p.rot}deg)`,
@@ -237,12 +251,13 @@ function onParticleClick(p: Particle, ev: MouseEvent) {
   focusReady.value = false
 
   // 3) берём позицию кликнутой картинки
-  const imgEl = ev.currentTarget as HTMLImageElement
+  const imgEl = ev.currentTarget as HTMLElement
   const r = imgEl.getBoundingClientRect()
 
   focused.value = {
     id: p.id,
     src: p.src,
+    variant: p.variant,
     startLeft: r.left,
     startTop: r.top,
     startW: r.width,
@@ -259,36 +274,33 @@ function onParticleClick(p: Particle, ev: MouseEvent) {
   })
 }
 
+const focusTargetSize = computed(() => {
+  if (!focused.value) return 0
+
+  const padX = -50     // поля по бокам
+  const padY = 0    // поля сверху/снизу + место под кнопки/текст
+
+  const maxW = window.innerWidth - padX * 2
+  const maxH = window.innerHeight - padY * 2
+
+  // т.к. иконка квадратная 1em x 1em
+  return Math.floor(Math.min(maxW, maxH))
+})
+
 const focusTransform = computed(() => {
-  if (!focused.value) return 'translate3d(0px,0px,0) scale(1)'
+  if (!focused.value) return 'translate3d(0px,0px,0)'
 
   const f = focused.value
+  const target = focusTargetSize.value || f.startW
 
-  // ✅ целевая ширина почти на весь экран
-  const padX = -50 // отступы по бокам
-  const targetMaxW = window.innerWidth - padX * 2
+  // хотим, чтобы фокус-элемент стоял по центру экранa
+  const endLeft = window.innerWidth / 2 - target / 2
+  const endTop = window.innerHeight / 2 - target / 2
 
-  // ✅ по высоте оставим место под кнопку и верх/низ
-  const padY = 100
-  const targetMaxH = window.innerHeight - padY * 2
+  const dx = endLeft - f.startLeft
+  const dy = endTop - f.startTop - 20
 
-  // ✅ scale так, чтобы вписаться и по ширине, и по высоте (пропорционально)
-  const scale = Math.min(targetMaxW / f.startW, targetMaxH / f.startH)
-
-  // движение в центр
-  const centerX = window.innerWidth / 2
-  const centerY = window.innerHeight / 2
-  const startCenterX = f.startLeft + f.startW / 2
-  const startCenterY = f.startTop + f.startH / 2
-
-  const dx = centerX - startCenterX
-  const dy = centerY - startCenterY
-
-  const tx = f.active ? dx : 0
-  const ty = f.active ? dy : 0
-  const s = f.active ? scale : 1
-
-  return `translate3d(${tx}px, ${ty}px, 0) scale(${s})`
+  return f.active ? `translate3d(${dx}px, ${dy}px, 0)` : 'translate3d(0px,0px,0)'
 })
 
 const isShowOpenButton = ref(false)
@@ -317,25 +329,34 @@ const valentineText = computed<string>(() => {
 
   return valentines[focused.value?.id - 1]
 })
+
+function onFocusTransitionEnd(e: TransitionEvent) {
+  if (e.propertyName !== 'transform') return
+  focusReady.value = true
+  isShowOpenButton.value = true
+}
 </script>
 
 <template>
   <div ref="rootEl" class="valentine-activate-screen" aria-hidden="true">
     <button @click="onClose" class="valentine-activate-screen__close">Закрыть</button>
 
-    <h3 :class="{'valentine-activate-screen__hint--hide': focused}" class="valentine-activate-screen__hint">Выбери свою валентинку</h3>
+    <h3
+      :class="{ 'valentine-activate-screen__hint--hide': focused }"
+      class="valentine-activate-screen__hint"
+    >
+      Выбери свою валентинку
+    </h3>
 
     <!-- слой частиц -->
     <div class="valentine-layer">
-      <img
+      <Component
         v-for="p in particles"
         :key="p.id"
+        :is="SETTINGS.componentVariants[p.variant]"
         @click.stop="onParticleClick(p, $event)"
-        :src="p.src"
         :style="particleStyle(p)"
         class="valentine-item"
-        alt=""
-        draggable="false"
       />
     </div>
 
@@ -345,18 +366,12 @@ const valentineText = computed<string>(() => {
       :style="{
         left: focused.startLeft + 'px',
         top: focused.startTop + 'px',
-        width: focused.startW + 'px',
-        height: focused.startH + 'px',
+        fontSize: (focused.active ? focusTargetSize : focused.startW) + 'px',  // ✅ вместо width/height
         transform: focusTransform,
       }"
-      @transitionend="
-        () => {
-          focusReady = true
-          isShowOpenButton = true
-        }
-      "
+      @transitionend="onFocusTransitionEnd"
     >
-      <img class="focus-img" :src="focused.src" alt="" />
+      <Component :is="SETTINGS.componentVariants[focused.variant]" class="focus-img" />
     </div>
 
     <button
@@ -448,6 +463,9 @@ const valentineText = computed<string>(() => {
   -webkit-user-drag: none;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.12));
 
+  display: inline-block; /* ✅ важно для em */
+  line-height: 1;
+
   pointer-events: auto;
 }
 
@@ -455,9 +473,13 @@ const valentineText = computed<string>(() => {
   position: fixed;
   display: grid;
   place-items: center;
-  transition: transform 520ms cubic-bezier(0.2, 0.9, 0.2, 1);
   will-change: transform;
   transform-origin: center center; /* ✅ важно для правильного увеличения */
+
+  transition:
+    transform 520ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    font-size 520ms cubic-bezier(0.2, 0.9, 0.2, 1); /* ✅ добавили fz */
+  line-height: 1; /* ✅ */
 }
 
 .focus-img {
@@ -510,6 +532,7 @@ const valentineText = computed<string>(() => {
   font-size: 24px;
   backdrop-filter: blur(10px);
   z-index: 1050;
+  color: hsl(0, 0%, 100%);
 }
 
 .focus-btn.focus-btn--again {
@@ -518,6 +541,7 @@ const valentineText = computed<string>(() => {
   padding: 8px 12px;
   font-size: 16px;
   border-radius: 4px;
+  color: hsl(0, 0%, 0%);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
 </style>
