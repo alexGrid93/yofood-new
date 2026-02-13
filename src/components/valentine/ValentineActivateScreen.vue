@@ -108,7 +108,9 @@ function pickImage() {
 }
 
 function pickVariant(): keyof typeof SETTINGS.componentVariants {
-  const keys = Object.keys(SETTINGS.componentVariants) as Array<keyof typeof SETTINGS.componentVariants>
+  const keys = Object.keys(SETTINGS.componentVariants) as Array<
+    keyof typeof SETTINGS.componentVariants
+  >
   return keys[Math.floor(Math.random() * keys.length)] ?? 'A'
 }
 
@@ -215,6 +217,7 @@ function particleStyle(p: Particle) {
 }
 
 onMounted(() => {
+  document.body.classList.add('body--no-scroll')
   updateReducedMotion()
   const mq = window.matchMedia?.('(prefers-reduced-motion: reduce)')
   mq?.addEventListener?.('change', updateReducedMotion)
@@ -227,6 +230,7 @@ onMounted(() => {
   window.addEventListener('resize', onResize)
 
   onBeforeUnmount(() => {
+    document.body.classList.remove('body--no-scroll')
     stop()
     mq?.removeEventListener?.('change', updateReducedMotion)
     window.removeEventListener('resize', onResize)
@@ -234,6 +238,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  document.body.classList.remove('body--no-scroll')
   stop()
 })
 
@@ -277,8 +282,8 @@ function onParticleClick(p: Particle, ev: MouseEvent) {
 const focusTargetSize = computed(() => {
   if (!focused.value) return 0
 
-  const padX = -50     // поля по бокам
-  const padY = 0    // поля сверху/снизу + место под кнопки/текст
+  const padX = -50 // поля по бокам
+  const padY = 0 // поля сверху/снизу + место под кнопки/текст
 
   const maxW = window.innerWidth - padX * 2
   const maxH = window.innerHeight - padY * 2
@@ -366,7 +371,7 @@ function onFocusTransitionEnd(e: TransitionEvent) {
       :style="{
         left: focused.startLeft + 'px',
         top: focused.startTop + 'px',
-        fontSize: (focused.active ? focusTargetSize : focused.startW) + 'px',  // ✅ вместо width/height
+        fontSize: (focused.active ? focusTargetSize : focused.startW) + 'px', // ✅ вместо width/height
         transform: focusTransform,
       }"
       @transitionend="onFocusTransitionEnd"
@@ -547,7 +552,7 @@ function onFocusTransitionEnd(e: TransitionEvent) {
 </style>
 
 <style>
-body {
+body.body--no-scroll {
   overflow: hidden;
 }
 </style>
