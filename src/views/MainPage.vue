@@ -37,11 +37,6 @@ import Text from 'ant-design-vue/es/typography/Text'
 import { useShareImage } from '@/features/useShareImage.ts'
 import { useHideControls } from '@/features/useHideControls.ts'
 import { HideControl } from '@/enums/HideControl.ts'
-import ValentineActivateButton from '@/components/valentine/ValentineActivateButton.vue'
-import { useStorage } from '@vueuse/core'
-import ValentineActivateScreen from '@/components/valentine/ValentineActivateScreen.vue'
-
-const isActivateValentineScreen = useStorage('valentineActivateScreen', false)
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -187,8 +182,6 @@ const { clickHideControl, isShowHideControls } = useHideControls()
 </script>
 
 <template>
-  <ValentineActivateScreen v-if="isActivateValentineScreen" />
-
   <Flex class="menu" align="center" gap="small">
     <Button
       v-if="isShowHideControls"
@@ -232,8 +225,6 @@ const { clickHideControl, isShowHideControls } = useHideControls()
         <ShareAltOutlined />
       </template>
     </Button>
-
-    <ValentineActivateButton class="valentineActivateButton" />
 
     <Modal
       v-model:open="isUpdateModalOpen"
@@ -385,11 +376,5 @@ body {
   width: 100%;
   height: 100%;
   aspect-ratio: 1/1;
-}
-
-.valentineActivateButton {
-  position: absolute;
-  right: -20px;
-  top: 155px;
 }
 </style>
