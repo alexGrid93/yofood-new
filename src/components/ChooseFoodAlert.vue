@@ -2,19 +2,18 @@
 import { Alert } from 'ant-design-vue'
 import OnionCatImg from '../assets/onion-cat.png'
 
-const onClose = () => {
-  console.log(123)
-}
+defineEmits(['onCloseAlert'])
 </script>
 
 <template>
   <Alert
+    @close="$emit('onCloseAlert')"
     message="Не останешься ли ты голодным на следующей на неделе?"
     description="p.s. Заполни табличкку :)"
     showIcon
     banner
     type="error"
-    :closable="{ closeIcon: true, onClose, 'aria-label': 'close' }"
+    closable
     class="choose-food-alert"
   >
     <template #icon>

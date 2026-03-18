@@ -38,6 +38,7 @@ import { useShareImage } from '@/features/useShareImage.ts'
 import { useHideControls } from '@/features/useHideControls.ts'
 import { HideControl } from '@/enums/HideControl.ts'
 import ChooseFoodAlert from '@/components/ChooseFoodAlert.vue'
+import { useFoodAlert } from '@/features/useFoodAlert.ts'
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -180,10 +181,11 @@ watch(isUpdateModalOpen, (isOpen) => {
 watch(selectedDay, () => (selectedDish.value = undefined))
 
 const { clickHideControl, isShowHideControls } = useHideControls()
+const { isShow, onClose } = useFoodAlert()
 </script>
 
 <template>
-  <ChooseFoodAlert class="food-alert" />
+  <ChooseFoodAlert v-if="isShow" @onCloseAlert="onClose" class="food-alert" />
   <Flex class="menu" align="center" gap="small">
     <Button
       v-if="isShowHideControls"
