@@ -37,6 +37,7 @@ import Text from 'ant-design-vue/es/typography/Text'
 import { useShareImage } from '@/features/useShareImage.ts'
 import { useHideControls } from '@/features/useHideControls.ts'
 import { HideControl } from '@/enums/HideControl.ts'
+import ChooseFoodAlert from '@/components/ChooseFoodAlert.vue'
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -182,14 +183,17 @@ const { clickHideControl, isShowHideControls } = useHideControls()
 </script>
 
 <template>
+  <ChooseFoodAlert class="food-alert" />
   <Flex class="menu" align="center" gap="small">
     <Button
       v-if="isShowHideControls"
-      @click="$router.push({
-        query: {
-          mode: 'delivery'
-        }
-      })"
+      @click="
+        $router.push({
+          query: {
+            mode: 'delivery',
+          },
+        })
+      "
       size="large"
     >
       <template #icon>
@@ -376,5 +380,14 @@ body {
   width: 100%;
   height: 100%;
   aspect-ratio: 1/1;
+}
+
+.food-alert {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: calc(100% + 40px);
+  transform: translateX(-50%);
+  z-index: 9999999;
 }
 </style>
