@@ -3,8 +3,9 @@ import { arrayDays, currentDayView } from '@/utils/constants.ts'
 import { type Ref, ref } from 'vue'
 
 interface IUseFoodAlert {
-  isShow: Ref<boolean>;
-  onClose: () => void;
+  isShow: Ref<boolean>
+  onClose: () => void
+  remindMeLater: () => void
 }
 
 const isClosedTodayOrYesterday = (dateStr: string): boolean => {
@@ -38,8 +39,13 @@ export const useFoodAlert = (): IUseFoodAlert => {
     isShow.value = false
   };
 
+  const remindMeLater = (): void => {
+    isShow.value = false
+  };
+
   return {
     isShow,
     onClose,
+    remindMeLater,
   }
 };

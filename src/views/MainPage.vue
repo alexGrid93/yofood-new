@@ -181,11 +181,11 @@ watch(isUpdateModalOpen, (isOpen) => {
 watch(selectedDay, () => (selectedDish.value = undefined))
 
 const { clickHideControl, isShowHideControls } = useHideControls()
-const { isShow, onClose } = useFoodAlert()
+const { isShow, onClose, remindMeLater } = useFoodAlert()
 </script>
 
 <template>
-  <ChooseFoodAlert v-if="isShow" @onCloseAlert="onClose" class="food-alert" />
+  <ChooseFoodAlert v-if="isShow" @onCloseAlert="onClose" @remindMeLater="remindMeLater" class="food-alert" />
   <Flex class="menu" align="center" gap="small">
     <Button
       v-if="isShowHideControls"

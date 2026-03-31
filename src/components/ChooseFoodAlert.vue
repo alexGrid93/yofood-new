@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { Alert } from 'ant-design-vue'
-import OnionCatImg from '../assets/onion-cat.png'
+import { Alert, Button } from 'ant-design-vue'
+import AlertImage from '../assets/cucumber-cat.png'
+import { BellOutlined } from '@ant-design/icons-vue'
 
-defineEmits(['onCloseAlert'])
+defineEmits(['onCloseAlert', 'remindMeLater'])
 </script>
 
 <template>
   <Alert
     @close="$emit('onCloseAlert')"
     message="Не останешься ли ты голодным на следующей на неделе?"
-    description="p.s. Заполни табличкку :)"
     showIcon
     banner
     type="error"
@@ -17,14 +17,41 @@ defineEmits(['onCloseAlert'])
     class="choose-food-alert"
   >
     <template #icon>
-      <img :src="OnionCatImg" alt="" data-class="choose-food-alert__img" />
+      <img :src="AlertImage" alt="" data-class="choose-food-alert__img" />
+    </template>
+
+    <template #description>
+      p.s. Заполни табличкку :)
+
+      <Button
+        @click="$emit('remindMeLater')"
+        ghost
+        type="dashed"
+        block
+        class="choose-food-alert__remind"
+      >
+        <template #icon>
+          <BellOutlined />
+        </template>
+
+        Напомнить позже
+      </Button>
     </template>
   </Alert>
 </template>
 
 <style scoped>
 .choose-food-alert {
-  background-color: #edc9ff;
+  --choose-food-alert-bg: #edc9ff;
+  --choose-food-alert-remind: #0e33bf;
+
+  background-color: var(--choose-food-alert-bg);
+}
+
+.choose-food-alert__remind {
+  margin-top: 12px;
+  color: var(--choose-food-alert-remind);
+  border-color: var(--choose-food-alert-remind);
 }
 
 .choose-food-alert :deep(.ant-alert-message) {
@@ -37,5 +64,6 @@ defineEmits(['onCloseAlert'])
 
 [data-class='choose-food-alert__img'] {
   width: 80px;
+  align-self: stretch;
 }
 </style>
