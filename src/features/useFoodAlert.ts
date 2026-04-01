@@ -1,5 +1,5 @@
 import { LocalStorageKey } from '@/enums/LocalStorageKey.ts'
-import { arrayDays, currentDayView } from '@/utils/constants.ts'
+import { currentDayView, DaysMap } from '@/utils/constants.ts'
 import { type Ref, ref } from 'vue'
 
 interface IUseFoodAlert {
@@ -7,6 +7,8 @@ interface IUseFoodAlert {
   onClose: () => void
   remindMeLater: () => void
 }
+
+const REMIND_MINUTES = 30
 
 const isClosedTodayOrYesterday = (dateStr: string): boolean => {
   const closeDate = new Date(dateStr)
@@ -20,17 +22,28 @@ const isClosedTodayOrYesterday = (dateStr: string): boolean => {
   )
 }
 
+const isRemindAgain = (lastRemindTime: string): boolean => {
+  const lastRemind = new Date(lastRemindTime).getTime()
+  const now = Date.now()
+  const diffMs = now - lastRemind
+  const diffMinutes = diffMs / (1000 * 60)
+
+  return diffMinutes >= REMIND_MINUTES
+};
+
 export const useFoodAlert = (): IUseFoodAlert => {
   const isShow = ref<boolean>(false);
 
-  const daysForShow = [arrayDays[3], arrayDays[4]]
+  const daysForShow = [DaysMap.Thu, DaysMap.Fri, DaysMap.Wed];
 
   const lastCloseFoodAlertValue = localStorage.getItem(LocalStorageKey.LAST_CLOSE_FOOD_ALERT)
+  const remindMeClickTime = localStorage.getItem(LocalStorageKey.REMIND_ME_CLICK_TIME)
 
   const isAllowedDay = daysForShow.includes(currentDayView)
   const isNotClosedRecently = !lastCloseFoodAlertValue || !isClosedTodayOrYesterday(lastCloseFoodAlertValue)
+  const isRemind = !remindMeClickTime || isRemindAgain(remindMeClickTime)
 
-  if (isAllowedDay && isNotClosedRecently) {
+  if (isAllowedDay && isNotClosedRecently && isRemind) {
     isShow.value = true
   }
 
@@ -41,6 +54,7 @@ export const useFoodAlert = (): IUseFoodAlert => {
 
   const remindMeLater = (): void => {
     isShow.value = false
+    localStorage.setItem(LocalStorageKey.REMIND_ME_CLICK_TIME, new Date().toISOString())
   };
 
   return {

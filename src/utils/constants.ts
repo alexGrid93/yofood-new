@@ -15,6 +15,24 @@ export const getCurrentDateView = (date: Date, config?: { withWeekday: boolean }
 
 export const arrayDays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб']
 
+interface IDaysMap {
+  Mon: string
+  Tue: string
+  Wed: string
+  Thu: string
+  Fri: string
+  Sat: string
+}
+
+export const DaysMap: IDaysMap = {
+  Mon: arrayDays[0],
+  Tue: arrayDays[1],
+  Wed: arrayDays[2],
+  Thu: arrayDays[3],
+  Fri: arrayDays[4],
+  Sat: arrayDays[5],
+}
+
 export const days = new Set(arrayDays)
 
 const getCurrentWeekDay = () => {
