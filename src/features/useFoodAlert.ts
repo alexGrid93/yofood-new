@@ -34,7 +34,7 @@ const isRemindAgain = (lastRemindTime: string): boolean => {
 export const useFoodAlert = (): IUseFoodAlert => {
   const isShow = ref<boolean>(false);
 
-  const daysForShow = [DaysMap.Thu, DaysMap.Fri, DaysMap.Wed];
+  const daysForShow = [DaysMap.Thu, DaysMap.Fri];
 
   const lastCloseFoodAlertValue = localStorage.getItem(LocalStorageKey.LAST_CLOSE_FOOD_ALERT)
   const remindMeClickTime = localStorage.getItem(LocalStorageKey.REMIND_ME_CLICK_TIME)
