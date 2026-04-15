@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Alert, Button } from 'ant-design-vue'
-import AlertImage from '../assets/cucumber-cat.png'
+import AlertImage from '../assets/racoon.png'
 import { BellOutlined } from '@ant-design/icons-vue'
 
 defineEmits(['onCloseAlert', 'remindMeLater'])
