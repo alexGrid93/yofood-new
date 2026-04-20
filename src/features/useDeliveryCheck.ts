@@ -1,6 +1,7 @@
 import type { DayMenu, FoodItem } from '@/utils/types.ts'
 import { EmojiMap } from '@/constants/emojiMap.ts'
 import type { DishType } from '@/enums/DishType.ts'
+import { LocalStorageKey } from '@/enums/LocalStorageKey.ts'
 
 export const useDeliveryCheck = () => {
   const menuDataFromStorage = localStorage.getItem('menuData')
@@ -36,10 +37,10 @@ export const useDeliveryCheck = () => {
 
   const setTotalToStore = (total: Record<DishType, FoodItem[]> | null) => {
     if (!total) return
-    localStorage.setItem('totalDishes', JSON.stringify(total))
+    localStorage.setItem(LocalStorageKey.TOTAL_DISHES, JSON.stringify(total))
   };
   const getTotalFromStore = (): Record<DishType, FoodItem[]> | null => {
-    const total = localStorage.getItem('totalDishes')
+    const total = localStorage.getItem(LocalStorageKey.TOTAL_DISHES)
 
     if (!total || total === 'undefined') return null
 

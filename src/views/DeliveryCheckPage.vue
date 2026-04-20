@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CurrentDate from '@/components/CurrentDate.vue'
 import TitleContainer from '@/components/TitleContainer.vue'
-import { Flex, List, ListItem, Badge } from 'ant-design-vue'
+import { Button, Flex, List, ListItem, Badge } from 'ant-design-vue'
 import { onMounted, ref } from 'vue'
 import { currentDayView } from '@/utils/constants.ts'
 import ActualMenu from '@/components/ActualMenu.vue'
@@ -10,6 +10,7 @@ import { EmojiMap } from '@/constants/emojiMap.ts'
 import type { FoodItem } from '@/utils/types.ts'
 import { sortByPriority } from '@/utils/sortByPriority.ts'
 import type { DishType } from '@/enums/DishType.ts'
+import { LocalStorageKey } from '@/enums/LocalStorageKey.ts'
 
 const currentDate = ref(new Date())
 const { getTotalDishes, setTotalToStore, getTotalFromStore, updateDishStatus } = useDeliveryCheck()
@@ -38,10 +39,10 @@ const updateStatus = (type: DishType, name: string) => {
 }
 
 onMounted(() => {
-  const currentTotalDay = localStorage.getItem('currentTotalDay')
+  const currentTotalDay = localStorage.getItem(LocalStorageKey.CURRENT_TOTAL_DAY)
 
   if (!currentTotalDay) {
-    localStorage.setItem('currentTotalDay', currentDayView)
+    localStorage.setItem(LocalStorageKey.CURRENT_TOTAL_DAY, currentDayView)
   }
 
   if (currentTotalDay === currentDayView) {
@@ -59,12 +60,19 @@ onMounted(() => {
 
   totalDishes.value = total || {}
 
-  localStorage.setItem('currentTotalDay', currentDayView)
+  localStorage.setItem(LocalStorageKey.CURRENT_TOTAL_DAY, currentDayView)
 
   return
 })
 
 const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
+
+const onReset = (): void => {
+  localStorage.removeItem(LocalStorageKey.CURRENT_TOTAL_DAY)
+  localStorage.removeItem(LocalStorageKey.TOTAL_DISHES)
+
+  window.location.reload()
+};
 </script>
 
 <template>
@@ -72,6 +80,8 @@ const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
     <CurrentDate :date="currentDate" />
     <TitleContainer @click-logo="$router.push('')" />
     <ActualMenu />
+
+    <Button @click="onReset" class="delivery-check-page__reset"> Reset </Button>
 
     <Flex vertical gap="10">
       <template
@@ -128,5 +138,11 @@ const priority = [EmojiMap.breakfast.key, EmojiMap.juice.key]
   padding: 0;
   margin-bottom: 15px;
   font-size: 16px;
+}
+
+.delivery-check-page__reset {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>
