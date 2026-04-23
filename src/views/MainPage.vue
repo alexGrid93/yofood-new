@@ -349,9 +349,10 @@ const openHB = () => {
     v-model:open="isOpenHBModal"
     :footer="null"
     :getContainer="false"
+    destroyOnClose
     title="Записка шефу:"
     centered
-    wrapClassName="hb-modal"
+    class="hb-modal"
   >
     <p>
       С днюхой, шеф! 🎉<br />Сегодня день рождения у человека, который придумал и создал yofood —
