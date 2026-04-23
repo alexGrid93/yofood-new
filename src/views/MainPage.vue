@@ -349,7 +349,6 @@ const openHB = () => {
     v-model:open="isOpenHBModal"
     :footer="null"
     :getContainer="false"
-    destroyOnClose
     title="Записка шефу:"
     centered
     class="hb-modal"
@@ -381,10 +380,6 @@ body {
 
 body:has(.hb-banner) {
   margin-top: 90px;
-}
-
-body:has(.hb-modal) {
-  overflow: hidden;
 }
 
 @keyframes spin {
