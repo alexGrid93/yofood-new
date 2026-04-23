@@ -345,7 +345,14 @@ const openHB = () => {
     </div>
   </Flex>
 
-  <Modal v-model:open="isOpenHBModal" title="Записка шефу:" :footer="null" centered>
+  <Modal
+    v-model:open="isOpenHBModal"
+    :footer="null"
+    :getContainer="false"
+    title="Записка шефу:"
+    centered
+    wrapClassName="hb-modal"
+  >
     <p>
       С днюхой, шеф! 🎉<br />Сегодня день рождения у человека, который придумал и создал yofood —
       приложение, которым вы пользуетесь каждый день. Без него не было бы ни этого сервиса, ни нас.
@@ -373,6 +380,10 @@ body {
 
 body:has(.hb-banner) {
   margin-top: 90px;
+}
+
+body:has(.hb-modal) {
+  overflow: hidden;
 }
 
 @keyframes spin {
