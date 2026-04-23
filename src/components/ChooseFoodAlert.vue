@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Alert, Button } from 'ant-design-vue'
-import AlertImage from '../assets/racoon.png'
+import AlertImage from '../assets/khife-cat.png'
 import { BellOutlined } from '@ant-design/icons-vue'
 
 defineEmits(['onCloseAlert', 'remindMeLater'])
@@ -64,6 +64,6 @@ defineEmits(['onCloseAlert', 'remindMeLater'])
 
 [data-class='choose-food-alert__img'] {
   width: 80px;
-  align-self: stretch;
+  //align-self: stretch;
 }
 </style>
