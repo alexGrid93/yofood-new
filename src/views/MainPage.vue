@@ -182,10 +182,26 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 
 const { clickHideControl, isShowHideControls } = useHideControls()
 const { isShow, onClose, remindMeLater } = useFoodAlert()
+
+const isOpenHBModal = ref(false)
+const openHB = () => {
+  isOpenHBModal.value = true
+}
 </script>
 
 <template>
-  <ChooseFoodAlert v-if="isShow" @onCloseAlert="onClose" @remindMeLater="remindMeLater" class="food-alert" />
+  <ChooseFoodAlert
+    v-if="isShow"
+    @onCloseAlert="onClose"
+    @remindMeLater="remindMeLater"
+    class="food-alert"
+  />
+
+  <section @click="openHB" class="hb-banner">
+    <h3>День рождения!</h3>
+    <span>Подробнее</span>
+  </section>
+
   <Flex class="menu" align="center" gap="small">
     <Button
       v-if="isShowHideControls"
@@ -328,6 +344,22 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
       <EmployeesByDish v-model="employeesByDish" />
     </div>
   </Flex>
+
+  <Modal v-model:open="isOpenHBModal" title="Записка шефу:" :footer="null" centered>
+    <p>
+      С днюхой, шеф! 🎉<br />Сегодня день рождения у человека, который придумал и создал yofood —
+      приложение, которым вы пользуетесь каждый день. Без него не было бы ни этого сервиса, ни нас.
+      От всей команды yofood — спасибо что ты есть!
+    </p>
+
+    <p>
+      Если хочешь тоже поздравить — вот форма 👉
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLScSZxk3a3HXEnXQ2R6gych9BZQ_97CtmEHA4sT8muZkBnsddQ/viewform?usp=publish-editor"
+        >тут</a
+      >
+    </p>
+  </Modal>
 </template>
 
 <style>
@@ -337,6 +369,10 @@ body {
   padding: 10px;
   color: #231f20;
   max-width: 800px;
+}
+
+body:has(.hb-banner) {
+  margin-top: 90px;
 }
 
 @keyframes spin {
@@ -390,6 +426,39 @@ body {
   left: 50%;
   width: calc(100% + 40px);
   transform: translateX(-50%);
-  z-index: 9999999;
+  z-index: 999;
+}
+
+.hb-banner {
+  position: absolute;
+
+  color: white;
+  top: -90px;
+  left: 50%;
+  width: calc(100% + 40px);
+  transform: translateX(-50%);
+  background-color: red;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+
+  h3 {
+    font-family: 'Press Start 2P', system-ui;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+  }
+
+  span {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+      'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+      'Noto Color Emoji';
+    font-size: 12px;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+  }
 }
 </style>
