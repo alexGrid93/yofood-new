@@ -28,5 +28,10 @@
     "how_to_save_title": "Kako sačuvati?",
     "how_to_save_step_1": "Pritisnite i zadržite ovu sliku.",
     "how_to_save_step_2": "U meniju koji se pojavi izaberite: sačuvaj sliku ili kopiraj sliku."
+  },
+  "food_alert_banner": {
+    "title": "Hoćeš li ostati gladan sledeće nedelje?",
+    "subtitle": "p.s. Popuni tabelu :)",
+    "remind_later": "Podsetite me kasnije"
   }
 }

@@ -28,5 +28,10 @@
     "how_to_save_title": "How to save?",
     "how_to_save_step_1": "Press and hold this image.",
     "how_to_save_step_2": "In the menu that appears, choose: save image or copy image."
+  },
+  "food_alert_banner": {
+    "title": "Don't want to go hungry next week?",
+    "subtitle": "p.s. Fill in the spreadsheet :)",
+    "remind_later": "Remind me later"
   }
 }
