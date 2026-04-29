@@ -35,6 +35,6 @@ const updateSelectedEmployee = (value: SelectValue) => {
 
 <style>
 .select {
-  min-width: 240px;
+  width: 100%;
 }
 </style>

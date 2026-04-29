@@ -20,6 +20,8 @@ import {
   Spin,
   Typography,
   TypographyTitle,
+  Row,
+  Col,
 } from 'ant-design-vue'
 import { ShareAltOutlined, ShoppingCartOutlined } from '@ant-design/icons-vue'
 
@@ -250,7 +252,7 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
   </Flex>
   <Flex gap="20" vertical v-if="errorState">
     <Text type="danger">{{ errorState }}</Text>
-    <Button @click="reloadPage">Перезагрузить</Button>
+    <Button @click="reloadPage">{{ $t('system.reload') }}</Button>
   </Flex>
 
   <Text class="spinner" v-else-if="isLoading">{{ $t('menu_is_updating') }}...</Text>
@@ -268,14 +270,18 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
     </div>
 
     <div v-if="isEmployeeMode">
-      <Flex gap="10">
-        <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
-        <SelectEmployee
-          @update:employee="onUpdateEmployee"
-          v-model="selectedEmployee"
-          :options="employeesToSelect"
-        />
-      </Flex>
+      <Row :gutter="[10, 10]">
+        <Col :flex="2">
+          <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
+        </Col>
+        <Col :flex="6">
+          <SelectEmployee
+            @update:employee="onUpdateEmployee"
+            v-model="selectedEmployee"
+            :options="employeesToSelect"
+          />
+        </Col>
+      </Row>
       <DishesByEmployee v-model="employeeMenuByDay" />
     </div>
     <div v-else>

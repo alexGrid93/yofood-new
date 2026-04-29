@@ -25,9 +25,15 @@ dayMap.set('сб', 'sat')
 </script>
 
 <template>
-  <Select size="large" :value="props.modelValue" @change="updateSelectedDay">
+  <Select class="select" size="large" :value="props.modelValue" @change="updateSelectedDay">
     <SelectOption v-for="day in options" :key="`day-${day}`" :value="day.value">
       {{ $t(`days.${dayMap.get(day.label)}`) }}
     </SelectOption>
   </Select>
 </template>
+
+<style>
+.select {
+  width: 100%;
+}
+</style>

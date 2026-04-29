@@ -8,15 +8,16 @@
   "system": {
     "cancel": "Cancel",
     "insert": "Insert",
-    "reset": "Reset"
+    "reset": "Reset",
+    "reload": "Reload"
   },
   "days": {
-    "mon": "mon",
-    "tue": "tue",
-    "wed": "wed",
-    "thu": "thu",
-    "fri": "fri",
-    "sat": "sat"
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat"
   },
   "update_menu_modal": {
     "title": "Update menu",

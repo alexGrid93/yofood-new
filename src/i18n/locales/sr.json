@@ -8,15 +8,16 @@
   "system": {
     "cancel": "Otkaži",
     "insert": "Umetni",
-    "reset": "Resetuj"
+    "reset": "Resetuj",
+    "reload": "Ponovo učitaj"
   },
   "days": {
-    "mon": "pon",
-    "tue": "uto",
-    "wed": "sre",
-    "thu": "čet",
-    "fri": "pet",
-    "sat": "sub"
+    "mon": "Pon",
+    "tue": "Uto",
+    "wed": "Sre",
+    "thu": "Čet",
+    "fri": "Pet",
+    "sat": "Sub"
   },
   "update_menu_modal": {
     "title": "Ažuriraj meni",
