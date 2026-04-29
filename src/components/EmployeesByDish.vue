@@ -4,7 +4,7 @@ const props = defineProps(['modelValue'])
 </script>
 
 <template>
-  <List :locale="{ emptyText: '🗿 Нет данных' }" class="list">
+  <List :locale="{ emptyText: $t('noData') }" class="list">
     <ListItem class="listItem" v-for="(dish, index) in props.modelValue" :key="index">{{
       dish
     }}</ListItem>

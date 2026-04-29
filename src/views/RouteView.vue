@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import DeliveryCheckPage from '@/views/DeliveryCheckPage.vue'
 import MainPage from '@/views/MainPage.vue'
+import MainSettingPage from '@/views/MainSettingPage.vue'
+import { I18nManager } from '@/i18n/manager.ts'
+
+const isShowMainSettingPage = !I18nManager.getCurrentUserLocale()
 </script>
 
 <template>
-  <template v-if="$route.query.mode === 'delivery'">
+  <template v-if="isShowMainSettingPage">
+    <MainSettingPage />
+  </template>
+
+  <template v-else-if="$route.query.mode === 'delivery'">
     <DeliveryCheckPage />
   </template>
 

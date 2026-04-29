@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Alert, Button } from 'ant-design-vue'
-import AlertImage from '../assets/khife-cat.png'
+import AlertImage from '../assets/gop-pigeon.png'
 import { BellOutlined } from '@ant-design/icons-vue'
 
 defineEmits(['onCloseAlert', 'remindMeLater'])
@@ -9,7 +9,7 @@ defineEmits(['onCloseAlert', 'remindMeLater'])
 <template>
   <Alert
     @close="$emit('onCloseAlert')"
-    message="Не останешься ли ты голодным на следующей на неделе?"
+    :message="$t('food_alert_banner.title')"
     showIcon
     banner
     type="error"
@@ -21,7 +21,7 @@ defineEmits(['onCloseAlert', 'remindMeLater'])
     </template>
 
     <template #description>
-      p.s. Заполни табличкку :)
+      {{ $t('food_alert_banner.subtitle') }}
 
       <Button
         @click="$emit('remindMeLater')"
@@ -34,7 +34,7 @@ defineEmits(['onCloseAlert', 'remindMeLater'])
           <BellOutlined />
         </template>
 
-        Напомнить позже
+        {{ $t('food_alert_banner.remind_later') }}
       </Button>
     </template>
   </Alert>

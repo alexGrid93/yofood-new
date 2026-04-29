@@ -21,6 +21,7 @@
     "excel-date-to-js": "^1.1.5",
     "node-xlsx": "^0.24.0",
     "vue": "^3.5.13",
+    "vue-i18n": "^11.4.0",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

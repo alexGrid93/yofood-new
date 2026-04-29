@@ -1,3 +1,5 @@
+import { I18nManager } from '@/i18n/manager.ts'
+
 export const millisecondsDay = 1000 * 60 * 60 * 24
 
 export const getCurrentDateView = (date: Date, config?: { withWeekday: boolean }) => {
@@ -8,7 +10,9 @@ export const getCurrentDateView = (date: Date, config?: { withWeekday: boolean }
     day: 'numeric',
   } as Intl.DateTimeFormatOptions
 
-  const formattedDate = date.toLocaleDateString('ru-RU', options)
+  const currentLocate = I18nManager.getCurrentLocale()
+
+  const formattedDate = date.toLocaleDateString(currentLocate === 'sr' ? 'sr-Latn' : currentLocate, options)
 
   return `${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}`
 }
