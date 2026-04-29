@@ -81,7 +81,7 @@ const onReset = (): void => {
     <TitleContainer @click-logo="$router.push('')" />
     <ActualMenu />
 
-    <Button @click="onReset" class="delivery-check-page__reset"> Reset </Button>
+    <Button @click="onReset" class="delivery-check-page__reset">{{ $t('system.reset') }}</Button>
 
     <Flex vertical gap="10">
       <template
@@ -91,7 +91,8 @@ const onReset = (): void => {
         :key="`type-${type}`"
       >
         <h3>
-          {{ EmojiMap[type[0] as DishType].name }}&nbsp;{{ EmojiMap[type[0] as DishType].emoji }}
+          {{ $t(`dish_type.${EmojiMap[type[0] as DishType].key}`) }}&nbsp;
+          {{ EmojiMap[type[0] as DishType].emoji }}
         </h3>
 
         <List :locale="{ emptyText: $t('noData') }" class="list">

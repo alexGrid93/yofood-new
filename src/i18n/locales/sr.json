@@ -7,7 +7,8 @@
   "menu_is_updating": "Meni se ažurira",
   "system": {
     "cancel": "Otkaži",
-    "insert": "Umetni"
+    "insert": "Umetni",
+    "reset": "Resetuj"
   },
   "days": {
     "mon": "pon",
@@ -33,5 +34,14 @@
     "title": "Hoćeš li ostati gladan sledeće nedelje?",
     "subtitle": "p.s. Popuni tabelu :)",
     "remind_later": "Podsetite me kasnije"
+  },
+  "dish_type": {
+    "breakfast": "Doručak",
+    "juice": "Sok",
+    "soup": "Supa",
+    "salad": "Salata",
+    "main_dish": "Glavno jelo",
+    "side_dish": "Prilog",
+    "dessert": "Desert"
   }
 }

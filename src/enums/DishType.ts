@@ -3,7 +3,7 @@ export enum DishType {
   JUICE = 'juice',
   SOUP = 'soup',
   SALAD = 'salad',
-  MAIN_DISH = 'mainDish',
-  SIDE_DISH = 'sideDish',
+  MAIN_DISH = 'main_dish',
+  SIDE_DISH = 'side_dish',
   DESSERT = 'dessert',
 }
