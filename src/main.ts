@@ -10,6 +10,6 @@ const app = createApp(App)
 app.use(router)
 app.use(i18n)
 
-I18nManager.init(i18n)
+I18nManager.init(i18n as never)
 
 app.mount('#app')

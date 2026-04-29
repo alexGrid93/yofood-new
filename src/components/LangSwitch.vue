@@ -5,7 +5,7 @@ import { I18nManager } from '@/i18n/manager.ts'
 
 const { availableLocales, locale } = useI18n({ useScope: 'global' })
 
-const switchLanguage = async (newLocale) => {
+const switchLanguage = async (newLocale: string) => {
   await I18nManager.setLocale(newLocale)
 }
 </script>
@@ -13,7 +13,7 @@ const switchLanguage = async (newLocale) => {
 <template>
   <Select
     :value="locale"
-    @change="(newVal) => switchLanguage(newVal)"
+    @change="(newVal) => switchLanguage(newVal as string)"
     :showArrow="false"
     size="large"
     class="lang-switch"

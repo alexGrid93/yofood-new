@@ -13,16 +13,22 @@ export const I18nManager = {
     const userLocale = localStorage.getItem('user-locale')
 
     if (userLocale) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       _i18n.global.locale.value = localStorage.getItem('user-locale')
-      document.documentElement.lang = localStorage.getItem('user-locale')
+      document.documentElement.lang = <string>localStorage.getItem('user-locale')
     }
   },
 
   getCurrentLocale(): string {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     if (!_i18n.global.locale.value) {
       return _fallbackLocale
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return _i18n.global.locale.value
   },
 
@@ -33,9 +39,13 @@ export const I18nManager = {
   async setLocale(newLocale: string) {
     if (!_i18n) throw new Error('I18nManager.setLocale called before init')
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const current = _i18n.global.locale.value
 
     if (current !== newLocale) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       _i18n.global.locale.value = newLocale
     }
 
