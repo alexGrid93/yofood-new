@@ -1,0 +1,32 @@
+{
+  "by_name": "By name",
+  "by_dish": "By dish",
+  "noData": "\uD83D\uDDFF No data",
+  "menuFrom": "Menu from {date}",
+  "outdated": "Outdated",
+  "menu_is_updating": "Menu is updating",
+  "system": {
+    "cancel": "Cancel",
+    "insert": "Insert"
+  },
+  "days": {
+    "mon": "mon",
+    "tue": "tue",
+    "wed": "wed",
+    "thu": "thu",
+    "fri": "fri",
+    "sat": "sat"
+  },
+  "update_menu_modal": {
+    "title": "Update menu",
+    "input_label": "Enter a link to the current spreadsheet",
+    "input_placeholder": "URL",
+    "info_message": "Auto-loading of the current spreadsheet is disabled. Admin spreadsheets are no longer used. They can be deleted."
+  },
+  "share_food_modal": {
+    "title": "Share a meal",
+    "how_to_save_title": "How to save?",
+    "how_to_save_step_1": "Press and hold this image.",
+    "how_to_save_step_2": "In the menu that appears, choose: save image or copy image."
+  }
+}

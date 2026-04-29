@@ -8,11 +8,9 @@ const menuStartDay = getMenuStartDay()
 </script>
 
 <template>
-  <div
-    :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'"
-    v-if="menuStartDay"
-  >
-    Меню от {{ getCurrentDateView(menuStartDay) }} {{ !isActualMenu ? '(не актуальное)' : '' }}
+  <div :class="isActualMenu ? 'actualMenuDate' : 'expiredMenuDate'" v-if="menuStartDay">
+    {{ $t('menuFrom', { date: getCurrentDateView(menuStartDay) }) }}
+    {{ !isActualMenu ? `(${$t('outdated').toLowerCase()})` : '' }}
   </div>
 </template>
 

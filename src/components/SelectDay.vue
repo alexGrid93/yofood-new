@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { arrayDays } from '@/utils/constants'
 import { getOptionsForSelect } from '@/utils/getOptionsForSelect'
-import { Select } from 'ant-design-vue'
+import { Select, SelectOption } from 'ant-design-vue'
 import type { SelectValue } from 'ant-design-vue/es/select'
 import { computed } from 'vue'
 
@@ -14,8 +14,20 @@ const updateSelectedDay = (value: SelectValue) => {
 }
 
 const options = computed(() => getOptionsForSelect(arrayDays))
+
+const dayMap = new Map()
+dayMap.set('пн', 'mon')
+dayMap.set('вт', 'tue')
+dayMap.set('ср', 'wed')
+dayMap.set('чт', 'thu')
+dayMap.set('пт', 'fri')
+dayMap.set('сб', 'sat')
 </script>
 
 <template>
-  <Select size="large" :options="options" :value="props.modelValue" @change="updateSelectedDay" />
+  <Select size="large" :value="props.modelValue" @change="updateSelectedDay">
+    <SelectOption v-for="day in options" :key="`day-${day}`" :value="day.value">
+      {{ $t(`days.${dayMap.get(day.label)}`) }}
+    </SelectOption>
+  </Select>
 </template>

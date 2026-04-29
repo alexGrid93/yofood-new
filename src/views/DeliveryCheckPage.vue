@@ -72,7 +72,7 @@ const onReset = (): void => {
   localStorage.removeItem(LocalStorageKey.TOTAL_DISHES)
 
   window.location.reload()
-};
+}
 </script>
 
 <template>
@@ -94,7 +94,7 @@ const onReset = (): void => {
           {{ EmojiMap[type[0] as DishType].name }}&nbsp;{{ EmojiMap[type[0] as DishType].emoji }}
         </h3>
 
-        <List :locale="{ emptyText: '🗿 Нет данных' }" class="list">
+        <List :locale="{ emptyText: $t('noData') }" class="list">
           <ListItem
             @click="updateStatus(type[0] as DishType, dish.rsName)"
             class="listItem dish"

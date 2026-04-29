@@ -39,6 +39,7 @@ import { useHideControls } from '@/features/useHideControls.ts'
 import { HideControl } from '@/enums/HideControl.ts'
 import ChooseFoodAlert from '@/components/ChooseFoodAlert.vue'
 import { useFoodAlert } from '@/features/useFoodAlert.ts'
+import LangSwitch from '@/components/LangSwitch.vue'
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -185,7 +186,12 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
 </script>
 
 <template>
-  <ChooseFoodAlert v-if="isShow" @onCloseAlert="onClose" @remindMeLater="remindMeLater" class="food-alert" />
+  <ChooseFoodAlert
+    v-if="isShow"
+    @onCloseAlert="onClose"
+    @remindMeLater="remindMeLater"
+    class="food-alert"
+  />
   <Flex class="menu" align="center" gap="small">
     <Button
       v-if="isShowHideControls"
@@ -232,57 +238,7 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
       </template>
     </Button>
 
-    <Modal
-      v-model:open="isUpdateModalOpen"
-      cancelText="Отменить"
-      :ok-button-props="{
-        disabled: !pastedSheetId,
-        onClick: () => handleUpdateMenu(),
-      }"
-      :getContainer="false"
-    >
-      <template #title> Обновить меню </template>
-      <Flex :gap="10" vertical>
-        <Text>Вставьте ссылку на актуальную таблицу</Text>
-        <Input v-model:value="pastedUrl" :status="inputStatus" placeholder="Ссылка" allow-clear />
-        <Button @click="pasteFromClipboard">Вставить</Button>
-      </Flex>
-      <Divider />
-      <Alert
-        message="Автоподгрузка актуальной таблицы отключена.
-Админские таблицы больше не используются. Их можно удалить."
-      />
-      <Divider />
-    </Modal>
-
-    <Modal
-      v-model:open="isOpenShareModal"
-      :getContainer="false"
-      :footer="false"
-      okText="Сохранить"
-      destroyOnClose
-      centered
-    >
-      <template #title>Поделиться едой</template>
-      <Flex align="center" justify="center" class="imageContainer">
-        <Spin v-if="!imageResponse" size="large" />
-        <Image
-          v-else
-          :src="imageResponse"
-          :preview="false"
-          :placeholder="true"
-          width="600"
-          height="600"
-        />
-      </Flex>
-
-      <TypographyTitle :level="5">Как сохранить?</TypographyTitle>
-      <Typography>1. Нажмите и удерживайте это изображение.</Typography>
-      <Typography
-        >2. В открывшемся меню выберите действие: сохранить изображение; копировать
-        изображение.</Typography
-      >
-    </Modal>
+    <LangSwitch />
   </Flex>
 
   <Flex vertical gap="20">
@@ -297,18 +253,20 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
     <Button @click="reloadPage">Перезагрузить</Button>
   </Flex>
 
-  <Text class="spinner" v-else-if="isLoading">Меню обновляется...</Text>
+  <Text class="spinner" v-else-if="isLoading">{{ $t('menu_is_updating') }}...</Text>
 
   <Flex vertical gap="25" v-else-if="menuStartDay">
     <ActualMenu @click="clickHideControl(HideControl.ACTUAL)" :style="{ marginTop: '20px' }" />
 
     <div>
       <Segmented
-        :value="isEmployeeMode ? 'Искать по имени' : 'Искать по блюду'"
-        :options="['Искать по имени', 'Искать по блюду']"
+        :value="isEmployeeMode ? $t('by_name') : $t('by_dish')"
+        :options="[$t('by_name'), $t('by_dish')]"
         @change="handleTogglehMode"
+        block
       />
     </div>
+
     <div v-if="isEmployeeMode">
       <Flex gap="10">
         <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
@@ -328,6 +286,56 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
       <EmployeesByDish v-model="employeesByDish" />
     </div>
   </Flex>
+
+  <Modal
+    v-model:open="isUpdateModalOpen"
+    :cancelText="$t('system.cancel')"
+    :ok-button-props="{
+      disabled: !pastedSheetId,
+      onClick: () => handleUpdateMenu(),
+    }"
+    :getContainer="false"
+  >
+    <template #title>{{ $t('update_menu_modal.title') }}</template>
+    <Flex :gap="10" vertical>
+      <Text>{{ $t('update_menu_modal.input_label') }}</Text>
+      <Input
+        v-model:value="pastedUrl"
+        :status="inputStatus"
+        :placeholder="$t('update_menu_modal.input_placeholder')"
+        allow-clear
+      />
+      <Button @click="pasteFromClipboard">{{ $t('system.insert') }}</Button>
+    </Flex>
+    <Divider />
+    <Alert :message="$t('update_menu_modal.info_message')" />
+    <Divider />
+  </Modal>
+
+  <Modal
+    v-model:open="isOpenShareModal"
+    :getContainer="false"
+    :footer="false"
+    destroyOnClose
+    centered
+  >
+    <template #title>{{ $t('share_food_modal.title') }}</template>
+    <Flex align="center" justify="center" class="imageContainer">
+      <Spin v-if="!imageResponse" size="large" />
+      <Image
+        v-else
+        :src="imageResponse"
+        :preview="false"
+        :placeholder="true"
+        width="600"
+        height="600"
+      />
+    </Flex>
+
+    <TypographyTitle :level="5">{{ $t('share_food_modal.how_to_save_title') }}</TypographyTitle>
+    <Typography>1. {{ $t('share_food_modal.how_to_save_step_1') }}</Typography>
+    <Typography>2. {{ $t('share_food_modal.how_to_save_step_2') }}</Typography>
+  </Modal>
 </template>
 
 <style>
