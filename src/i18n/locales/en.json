@@ -44,5 +44,22 @@
     "main_dish":  "Main dish",
     "side_dish": "Side dish",
     "dessert":  "Dessert"
+  },
+  "promotions": {
+    "segment_title": "Promo"
+  },
+  "promotions_data": {
+    "uziwa1": {
+      "title": "Uziwa",
+      "subtitle": "For first order"
+    },
+    "uziwa2": {
+      "title": "Uziwa",
+      "subtitle": "For evryone order"
+    },
+    "mount": {
+      "title": "Mount",
+      "subtitle": "For first order"
+    }
   }
 }

@@ -44,5 +44,22 @@
     "main_dish": "Основное блюдо",
     "side_dish": "Гарнир",
     "dessert": "Десерт"
+  },
+  "promotions": {
+    "segment_title": "Акции"
+  },
+  "promotions_data": {
+    "uziwa1": {
+      "title": "Uziwa",
+      "subtitle": "На первый заказ"
+    },
+    "uziwa2": {
+      "title": "Uziwa",
+      "subtitle": "На каждый заказ"
+    },
+    "mount": {
+      "title": "Mount",
+      "subtitle": "На первый заказ"
+    }
   }
 }
