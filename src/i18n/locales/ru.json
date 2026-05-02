@@ -46,7 +46,10 @@
     "dessert": "Десерт"
   },
   "promotions": {
-    "segment_title": "Акции"
+    "segment_title": "Акции",
+    "copy_error_1": "Произошла ошибка при копировании промокода",
+    "copy_error_2": "Не удалось скопировать промокод",
+    "copy_success": "Промокод успешно скопирован"
   },
   "promotions_data": {
     "uziwa": {

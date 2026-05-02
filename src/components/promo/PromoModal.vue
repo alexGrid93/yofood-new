@@ -3,6 +3,9 @@ import { Modal, Divider, message } from 'ant-design-vue'
 import type { IPromo } from '@/types/promo.ts'
 import PromoSocialIcon from '@/components/promo/PromoSocialIcon.vue'
 import { writeClipboard } from '@/utils/writeClipboard.ts'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Props {
   promo: IPromo | null
@@ -14,20 +17,20 @@ const open = defineModel<boolean>('open')
 
 const copyPromocode = async () => {
   if (!props.promo?.promocode) {
-    message.error('Произошла ошибка при копировании промокода')
+    message.error(t('promotions.copy_error_1'))
     return
   }
 
   try {
     await writeClipboard(props.promo.promocode)
-    message.success('Промокод успешно скопирован')
+    message.success(t('promotions.copy_success'))
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     try {
       await navigator.clipboard.writeText(props.promo.promocode)
-      message.success('Промокод успешно скопирован')
+      message.success(t('promotions.copy_success'))
     } catch {
-      message.error('Не удалось скопировать промокод')
+      message.error(t('promotions.copy_error_2'))
     }
   }
 }
