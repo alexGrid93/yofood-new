@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Modal, Divider } from 'ant-design-vue'
+import { Modal, Divider, message } from 'ant-design-vue'
 import type { IPromo } from '@/types/promo.ts'
 import PromoSocialIcon from '@/components/promo/PromoSocialIcon.vue'
+import { writeClipboard } from '@/utils/writeClipboard.ts'
 
 interface Props {
   promo: IPromo | null
@@ -12,12 +13,15 @@ const props = defineProps<Props>()
 const open = defineModel<boolean>('open')
 
 const copyPromocode = async () => {
-  const type = 'text/plain'
-  const clipboardItemData = {
-    [type]: props.promo?.promocode,
+  if (!props.promo?.promocode) {
+    message.error('Произошла ошибка при копировании промокода')
+
+    return
   }
-  const clipboardItem = new ClipboardItem(clipboardItemData)
-  await navigator.clipboard.write([clipboardItem])
+
+  await writeClipboard(props.promo?.promocode)
+
+  message.success('Промокод успешно скопирован')
 }
 </script>
 

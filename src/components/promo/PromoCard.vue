@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IPromo } from '@/types/promo.ts'
-import { computed, type CSSProperties } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
   promo: IPromo
