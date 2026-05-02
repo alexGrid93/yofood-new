@@ -1,15 +1,16 @@
 {
   "by_name": "By name",
   "by_dish": "By dish",
-  "noData": "\uD83D\uDDFF No data",
-  "menuFrom": "Menu from {date}",
+  "no_data": "\uD83D\uDDFF No data",
+  "menu_from": "Menu from {date}",
   "outdated": "Outdated",
   "menu_is_updating": "Menu is updating",
   "system": {
     "cancel": "Cancel",
     "insert": "Insert",
     "reset": "Reset",
-    "reload": "Reload"
+    "reload": "Reload",
+    "error": "Error"
   },
   "days": {
     "mon": "Mon",

@@ -9,7 +9,8 @@
     "cancel": "Otkaži",
     "insert": "Umetni",
     "reset": "Resetuj",
-    "reload": "Ponovo učitaj"
+    "reload": "Ponovo učitaj",
+    "error": "Greška"
   },
   "days": {
     "mon": "Pon",

@@ -38,7 +38,7 @@ const copyPromocode = async () => {
 
 <template>
   <Modal v-model:open="open" :getContainer="false" :footer="null" centered class="promo-modal">
-    <template v-if="!promo"> Ошибка </template>
+    <template v-if="!promo">{{ $t('system.error') }}</template>
     <template v-else>
       <div class="promo-modal-body">
         <picture>

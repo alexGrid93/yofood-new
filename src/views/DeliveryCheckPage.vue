@@ -95,7 +95,7 @@ const onReset = (): void => {
           {{ EmojiMap[type[0] as DishType].emoji }}
         </h3>
 
-        <List :locale="{ emptyText: $t('noData') }" class="list">
+        <List :locale="{ emptyText: $t('no_data') }" class="list">
           <ListItem
             @click="updateStatus(type[0] as DishType, dish.rsName)"
             class="listItem dish"
