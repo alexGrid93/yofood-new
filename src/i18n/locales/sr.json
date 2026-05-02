@@ -49,16 +49,8 @@
     "segment_title": "Promocije"
   },
   "promotions_data": {
-    "uziwa1": {
+    "uziwa": {
       "title": "Uziwa",
-      "subtitle": "Za prvu porudžbinu"
-    },
-    "uziwa2": {
-      "title": "Uziwa",
-      "subtitle": "Za svaku porudžbinu"
-    },
-    "mount": {
-      "title": "Mount",
       "subtitle": "Za prvu porudžbinu"
     }
   }

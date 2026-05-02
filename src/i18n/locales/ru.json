@@ -49,17 +49,10 @@
     "segment_title": "Акции"
   },
   "promotions_data": {
-    "uziwa1": {
+    "uziwa": {
       "title": "Uziwa",
-      "subtitle": "На первый заказ"
-    },
-    "uziwa2": {
-      "title": "Uziwa",
-      "subtitle": "На каждый заказ"
-    },
-    "mount": {
-      "title": "Mount",
-      "subtitle": "На первый заказ"
+      "subtitle": "От 6 бутылок",
+      "description": "Натуральные вина сербской винодельни Uziwa — с 15% скидкой и бесплатной доставкой при заказе от 6 бутылок"
     }
   }
 }

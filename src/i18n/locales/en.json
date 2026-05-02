@@ -49,16 +49,8 @@
     "segment_title": "Promo"
   },
   "promotions_data": {
-    "uziwa1": {
+    "uziwa": {
       "title": "Uziwa",
-      "subtitle": "For first order"
-    },
-    "uziwa2": {
-      "title": "Uziwa",
-      "subtitle": "For evryone order"
-    },
-    "mount": {
-      "title": "Mount",
       "subtitle": "For first order"
     }
   }
