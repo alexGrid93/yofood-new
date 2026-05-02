@@ -22,6 +22,7 @@ import {
   TypographyTitle,
   Row,
   Col,
+  Badge,
 } from 'ant-design-vue'
 import { ShareAltOutlined, ShoppingCartOutlined } from '@ant-design/icons-vue'
 
@@ -44,6 +45,7 @@ import { useFoodAlert } from '@/features/useFoodAlert.ts'
 import LangSwitch from '@/components/LangSwitch.vue'
 import PromoView from '@/components/promo/PromoView.vue'
 import { useI18n } from 'vue-i18n'
+import { usePromoMerketing } from '@/features/usePromoMerketing.ts'
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -124,7 +126,15 @@ onUnmounted(() => {
   window.removeEventListener('focus', updateDate)
 })
 
-const handleTogglehMode = (val: SegmentMode) => (segmentMode.value = val)
+const { isShowBadge, userVisitPromo } = usePromoMerketing()
+
+const handleTogglehMode = (val: SegmentMode) => {
+  segmentMode.value = val
+
+  if (val === SegmentMode.Promo) {
+    userVisitPromo()
+  }
+}
 
 const handleUpdateMenu = async () => {
   errorState.value = null
@@ -199,19 +209,25 @@ const { t } = useI18n()
 const segmentOptions = computed(() => [
   {
     value: SegmentMode.Employee,
-    label: t('by_name'),
+    payload: {
+      name: t('by_name'),
+    },
   },
   {
     value: SegmentMode.Dish,
-    label: t('by_dish'),
+    payload: {
+      name: t('by_dish'),
+    },
   },
   {
     value: SegmentMode.Promo,
-    label: t('promotions.segment_title'),
+    payload: {
+      name: t('promotions.segment_title'),
+    },
   },
 ])
 
-const segmentMode = ref<SegmentMode>(SegmentMode.Promo)
+const segmentMode = ref<SegmentMode>(SegmentMode.Employee)
 
 const isEmployeeModeActive = computed(() => segmentMode.value === SegmentMode.Employee)
 const isDishModeActive = computed(() => segmentMode.value === SegmentMode.Dish)
@@ -297,7 +313,16 @@ const isPromoModeActive = computed(() => segmentMode.value === SegmentMode.Promo
         :options="segmentOptions"
         @change="(val) => handleTogglehMode(val as SegmentMode)"
         block
-      />
+      >
+        <template #label="opt">
+          <template v-if="opt.value === SegmentMode.Promo && isShowBadge">
+            <Badge dot :offset="[5, 0]">
+              {{ opt.payload.name }}
+            </Badge>
+          </template>
+          <template v-else>{{ opt.payload.name }}</template>
+        </template>
+      </Segmented>
     </div>
 
     <div v-if="isEmployeeModeActive">
