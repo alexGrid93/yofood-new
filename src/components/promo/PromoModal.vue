@@ -15,13 +15,21 @@ const open = defineModel<boolean>('open')
 const copyPromocode = async () => {
   if (!props.promo?.promocode) {
     message.error('Произошла ошибка при копировании промокода')
-
     return
   }
 
-  await writeClipboard(props.promo?.promocode)
-
-  message.success('Промокод успешно скопирован')
+  try {
+    await writeClipboard(props.promo.promocode)
+    message.success('Промокод успешно скопирован')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    try {
+      await navigator.clipboard.writeText(props.promo.promocode)
+      message.success('Промокод успешно скопирован')
+    } catch {
+      message.error('Не удалось скопировать промокод')
+    }
+  }
 }
 </script>
 

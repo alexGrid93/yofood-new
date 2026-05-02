@@ -1,8 +1,16 @@
 export const writeClipboard = async (content: string): Promise<void> => {
-  const type = 'text/plain'
-  const clipboardItemData = {
-    [type]: content,
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(content)
+    return
   }
-  const clipboardItem = new ClipboardItem(clipboardItemData)
-  await navigator.clipboard.write([clipboardItem])
-};
+
+  const textarea = document.createElement('textarea')
+  textarea.value = content
+  textarea.style.position = 'fixed'
+  textarea.style.opacity = '0'
+  document.body.appendChild(textarea)
+  textarea.focus()
+  textarea.select()
+  document.execCommand('copy')
+  document.body.removeChild(textarea)
+}
