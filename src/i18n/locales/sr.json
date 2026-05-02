@@ -9,7 +9,8 @@
     "cancel": "Otkaži",
     "insert": "Umetni",
     "reset": "Resetuj",
-    "reload": "Ponovo učitaj"
+    "reload": "Ponovo učitaj",
+    "error": "Greška"
   },
   "days": {
     "mon": "Pon",
@@ -44,5 +45,18 @@
     "main_dish": "Glavno jelo",
     "side_dish": "Prilog",
     "dessert": "Desert"
+  },
+  "promotions": {
+    "segment_title": "Promocije",
+    "copy_error_1": "Došlo je do greške prilikom kopiranja promo koda",
+    "copy_error_2": "Nije uspelo kopiranje promo koda",
+    "copy_success": "Promo kod je uspešno kopiran"
+  },
+  "promotions_data": {
+    "uziwa": {
+      "title": "Uziwa",
+      "subtitle": "Od 6 boca",
+      "description": "Prirodna vina srpske vinarije Uziwa — 15% popusta i besplatna dostava pri narudžbini od 6 ili više boca"
+    }
   }
 }

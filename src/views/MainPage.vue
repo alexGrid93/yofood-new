@@ -22,6 +22,7 @@ import {
   TypographyTitle,
   Row,
   Col,
+  Badge,
 } from 'ant-design-vue'
 import { ShareAltOutlined, ShoppingCartOutlined } from '@ant-design/icons-vue'
 
@@ -42,6 +43,9 @@ import { HideControl } from '@/enums/HideControl.ts'
 import ChooseFoodAlert from '@/components/ChooseFoodAlert.vue'
 import { useFoodAlert } from '@/features/useFoodAlert.ts'
 import LangSwitch from '@/components/LangSwitch.vue'
+import PromoView from '@/components/promo/PromoView.vue'
+import { useI18n } from 'vue-i18n'
+import { usePromoMerketing } from '@/features/usePromoMerketing.ts'
 
 const menuDataFromStorage = localStorage.getItem('menuData')
 const selectedEmployeeFromStorage = localStorage.getItem('selectedEmployee')
@@ -122,7 +126,15 @@ onUnmounted(() => {
   window.removeEventListener('focus', updateDate)
 })
 
-const handleTogglehMode = () => (isEmployeeMode.value = !isEmployeeMode.value)
+const { isShowBadge, userVisitPromo } = usePromoMerketing()
+
+const handleTogglehMode = (val: SegmentMode) => {
+  segmentMode.value = val
+
+  if (val === SegmentMode.Promo) {
+    userVisitPromo()
+  }
+}
 
 const handleUpdateMenu = async () => {
   errorState.value = null
@@ -185,6 +197,41 @@ watch(selectedDay, () => (selectedDish.value = undefined))
 
 const { clickHideControl, isShowHideControls } = useHideControls()
 const { isShow, onClose, remindMeLater } = useFoodAlert()
+
+enum SegmentMode {
+  Employee,
+  Dish,
+  Promo,
+}
+
+const { t } = useI18n()
+
+const segmentOptions = computed(() => [
+  {
+    value: SegmentMode.Employee,
+    payload: {
+      name: t('by_name'),
+    },
+  },
+  {
+    value: SegmentMode.Dish,
+    payload: {
+      name: t('by_dish'),
+    },
+  },
+  {
+    value: SegmentMode.Promo,
+    payload: {
+      name: t('promotions.segment_title'),
+    },
+  },
+])
+
+const segmentMode = ref<SegmentMode>(SegmentMode.Employee)
+
+const isEmployeeModeActive = computed(() => segmentMode.value === SegmentMode.Employee)
+const isDishModeActive = computed(() => segmentMode.value === SegmentMode.Dish)
+const isPromoModeActive = computed(() => segmentMode.value === SegmentMode.Promo)
 </script>
 
 <template>
@@ -262,14 +309,23 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
 
     <div>
       <Segmented
-        :value="isEmployeeMode ? $t('by_name') : $t('by_dish')"
-        :options="[$t('by_name'), $t('by_dish')]"
-        @change="handleTogglehMode"
+        :value="segmentMode"
+        :options="segmentOptions"
+        @change="(val) => handleTogglehMode(val as SegmentMode)"
         block
-      />
+      >
+        <template #label="opt">
+          <template v-if="opt.value === SegmentMode.Promo && isShowBadge">
+            <Badge dot :offset="[5, 0]">
+              {{ opt.payload.name }}
+            </Badge>
+          </template>
+          <template v-else>{{ opt.payload.name }}</template>
+        </template>
+      </Segmented>
     </div>
 
-    <div v-if="isEmployeeMode">
+    <div v-if="isEmployeeModeActive">
       <Row :gutter="[10, 10]">
         <Col :flex="2">
           <SelectDay @update:day="onUpdateDay" v-model="selectedDay" />
@@ -284,12 +340,15 @@ const { isShow, onClose, remindMeLater } = useFoodAlert()
       </Row>
       <DishesByEmployee v-model="employeeMenuByDay" />
     </div>
-    <div v-else>
+    <div v-else-if="isDishModeActive">
       <Flex vertical gap="10">
         <SelectDay v-model="selectedDay" />
         <SelectDish v-model="selectedDish" :options="dishesToSelect[selectedDay]" />
       </Flex>
       <EmployeesByDish v-model="employeesByDish" />
+    </div>
+    <div v-else-if="isPromoModeActive">
+      <PromoView />
     </div>
   </Flex>
 

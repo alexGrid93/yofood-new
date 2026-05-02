@@ -1,15 +1,16 @@
 {
   "by_name": "By name",
   "by_dish": "By dish",
-  "noData": "\uD83D\uDDFF No data",
-  "menuFrom": "Menu from {date}",
+  "no_data": "\uD83D\uDDFF No data",
+  "menu_from": "Menu from {date}",
   "outdated": "Outdated",
   "menu_is_updating": "Menu is updating",
   "system": {
     "cancel": "Cancel",
     "insert": "Insert",
     "reset": "Reset",
-    "reload": "Reload"
+    "reload": "Reload",
+    "error": "Error"
   },
   "days": {
     "mon": "Mon",
@@ -44,5 +45,18 @@
     "main_dish":  "Main dish",
     "side_dish": "Side dish",
     "dessert":  "Dessert"
+  },
+  "promotions": {
+    "segment_title": "Promo",
+    "copy_error_1": "An error occurred while copying the promo code",
+    "copy_error_2": "Failed to copy the promo code",
+    "copy_success": "Promo code copied successfully"
+  },
+  "promotions_data": {
+    "uziwa": {
+      "title": "Uziwa",
+      "subtitle": "From 6 bottles",
+      "description": "Natural wines from Serbian winery Uziwa — 15% off and free delivery when ordering 6 or more bottles"
+    }
   }
 }
