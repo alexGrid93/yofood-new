@@ -1,8 +1,8 @@
 {
   "by_name": "Po imenu",
   "by_dish": "Po jelu",
-  "noData": "🗿 Nema podataka",
-  "menuFrom": "Meni od {date}",
+  "no_data": "🗿 Nema podataka",
+  "menu_from": "Meni od {date}",
   "outdated": "Zastarelo",
   "menu_is_updating": "Meni se ažurira",
   "system": {

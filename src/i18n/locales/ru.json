@@ -1,8 +1,8 @@
 {
   "by_name": "По имени",
   "by_dish": "По блюду",
-  "noData": "\uD83D\uDDFF Нет данных",
-  "menuFrom": "Меню от {date}",
+  "no_data": "\uD83D\uDDFF Нет данных",
+  "menu_from": "Меню от {date}",
   "outdated": "Не актуальное",
   "menu_is_updating": "Меню обновляется",
   "system": {
