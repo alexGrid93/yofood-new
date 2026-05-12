@@ -1,7 +1,6 @@
 import { computed, type ComputedRef, ref } from 'vue'
 import { LocalStorageKey } from '@/enums/LocalStorageKey.ts'
-
-const REAL_PROMO_INDEX = 1
+import { REAL_PROMO_INDEX } from '@/data/promo/promotions.ts'
 
 interface PromoMarketingReturn {
   isShowBadge: ComputedRef<boolean>

@@ -40,27 +40,6 @@ const styleVariables = computed(() => {
 </template>
 
 <style scoped>
-@property --pc-c-gradient-color {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: unset;
-}
-@property --pc-c-title-color {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: unset;
-}
-@property --pc-c-subtitle-color {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: unset;
-}
-@property --pc-c-percent-color {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: unset;
-}
-
 .promo-card {
   --pc-gradient-color: var(--pc-c-gradient-color, hsla(0deg, 0%, 87%, 80%));
   --pc-title-color: var(--pc-c-title-color, black);
@@ -125,6 +104,7 @@ const styleVariables = computed(() => {
   grid-area: subtitle;
 
   font-size: 18px;
+  line-height: 22px;
   color: var(--pc-subtitle-color);
 }
 .promo-card__percent {

@@ -368,6 +368,7 @@ const isPromoModeActive = computed(() => segmentMode.value === SegmentMode.Promo
         v-model:value="pastedUrl"
         :status="inputStatus"
         :placeholder="$t('update_menu_modal.input_placeholder')"
+        name="new-table-url"
         allow-clear
       />
       <Button @click="pasteFromClipboard">{{ $t('system.insert') }}</Button>
