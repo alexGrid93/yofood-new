@@ -52,6 +52,14 @@
     "copy_error_2": "Nije uspelo kopiranje promo koda",
     "copy_success": "Promo kod je uspešno kopiran"
   },
+  "domain_moved_modal": {
+    "title": "Preselili smo se",
+    "message": "Preselili smo se na novi domen. Aplikacija na ovom domenu će raditi do 24. maja 2026. godine",
+    "link_text": "Idi na yofood.org",
+    "copy_link": "Kopiraj link",
+    "copy_success": "Link je kopiran",
+    "copy_error": "Nije uspelo kopiranje linka"
+  },
   "promotions_data": {
     "uziwa": {
       "title": "Uziwa",

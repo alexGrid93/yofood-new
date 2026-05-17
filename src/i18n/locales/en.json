@@ -52,6 +52,14 @@
     "copy_error_2": "Failed to copy the promo code",
     "copy_success": "Promo code copied successfully"
   },
+  "domain_moved_modal": {
+    "title": "We have moved",
+    "message": "We have moved to a new domain. The app on this domain will work until May 24, 2026",
+    "link_text": "Go to yofood.org",
+    "copy_link": "Copy link",
+    "copy_success": "Link copied",
+    "copy_error": "Failed to copy the link"
+  },
   "promotions_data": {
     "uziwa": {
       "title": "Uziwa",
